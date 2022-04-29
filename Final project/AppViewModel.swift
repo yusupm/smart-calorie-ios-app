@@ -13,16 +13,23 @@ class AppViewModel: ObservableObject {
     let auth = Auth.auth()
     
     @Published var signedIn = false
+    @Published var alert = false
+    @Published var errorMessage = ""
+    @Published var isLoading = false
     
     var isSignedIn : Bool {
     return auth.currentUser != nil
     }
     
     func signIn(email: String, password: String){
+        isLoading.toggle()
         auth.signIn(withEmail: email, password: password) { [weak self] (result, error) in
+            self?.isLoading.toggle()
             if error != nil {
                 print("Error: \(error?.localizedDescription ?? "")")
-                //Self.showAlert = true
+                self?.errorMessage = error!.localizedDescription
+                self?.alert.toggle()
+                return
             } else {
                 //self.isSuccessful = true
                 print("Logged in!")
@@ -38,9 +45,13 @@ class AppViewModel: ObservableObject {
     }
     
     func signUp(email: String, password: String){
+        isLoading.toggle()
         auth.createUser(withEmail: email, password: password) { [weak self] result, error in
+            self?.isLoading.toggle()
             if error != nil {
                 print("Error: \(error?.localizedDescription ?? "")")
+                self?.alert.toggle()
+                self?.errorMessage = error!.localizedDescription
                 //Self.showAlert = true
             } else {
                 //self.isSuccessful = true
@@ -54,10 +65,12 @@ class AppViewModel: ObservableObject {
     }
     
     func signOut() {
+        isLoading.toggle()
         withAnimation {
             do {
                 try Auth.auth().signOut()
                 self.signedIn = false
+                self.isLoading.toggle()
             }
             catch {
                 

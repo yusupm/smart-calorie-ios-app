@@ -14,6 +14,9 @@
 		6556101C280E708D00455E40 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6556101B280E708D00455E40 /* Extensions.swift */; };
 		658C2995281AB72D0002CAF2 /* AccountCreationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C2994281AB72D0002CAF2 /* AccountCreationModel.swift */; };
 		658C2997281AB8110002CAF2 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C2996281AB8110002CAF2 /* AppViewModel.swift */; };
+		658C299D281AE7070002CAF2 /* NutritionKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C299C281AE7070002CAF2 /* NutritionKeys.swift */; };
+		658C299F281AE74B0002CAF2 /* AddCalorieSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C299E281AE74B0002CAF2 /* AddCalorieSheet.swift */; };
+		658C29A1281B02C90002CAF2 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C29A0281B02C90002CAF2 /* RegisterView.swift */; };
 		659C62CC2817BD8600C1DEDC /* LoginRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 659C62CB2817BD8600C1DEDC /* LoginRegisterView.swift */; };
 		65E3F0A7280A821D001A1F4E /* Final_projectApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3F0A6280A821D001A1F4E /* Final_projectApp.swift */; };
 		65E3F0A9280A821D001A1F4E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65E3F0A8280A821D001A1F4E /* ContentView.swift */; };
@@ -46,6 +49,9 @@
 		6556101B280E708D00455E40 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		658C2994281AB72D0002CAF2 /* AccountCreationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreationModel.swift; sourceTree = "<group>"; };
 		658C2996281AB8110002CAF2 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
+		658C299C281AE7070002CAF2 /* NutritionKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionKeys.swift; sourceTree = "<group>"; };
+		658C299E281AE74B0002CAF2 /* AddCalorieSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCalorieSheet.swift; sourceTree = "<group>"; };
+		658C29A0281B02C90002CAF2 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
 		659C62CB2817BD8600C1DEDC /* LoginRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRegisterView.swift; sourceTree = "<group>"; };
 		65E3F0A3280A821D001A1F4E /* Final project.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Final project.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		65E3F0A6280A821D001A1F4E /* Final_projectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Final_projectApp.swift; sourceTree = "<group>"; };
@@ -112,6 +118,8 @@
 			children = (
 				65E3F0A6280A821D001A1F4E /* Final_projectApp.swift */,
 				65E3F0A8280A821D001A1F4E /* ContentView.swift */,
+				658C299E281AE74B0002CAF2 /* AddCalorieSheet.swift */,
+				658C299C281AE7070002CAF2 /* NutritionKeys.swift */,
 				658C2996281AB8110002CAF2 /* AppViewModel.swift */,
 				658C2994281AB72D0002CAF2 /* AccountCreationModel.swift */,
 				6556101B280E708D00455E40 /* Extensions.swift */,
@@ -119,6 +127,7 @@
 				6543F87A2813E3960061D6E8 /* GoogleService-Info.plist */,
 				65E3F0AC280A8220001A1F4E /* Preview Content */,
 				659C62CB2817BD8600C1DEDC /* LoginRegisterView.swift */,
+				658C29A0281B02C90002CAF2 /* RegisterView.swift */,
 			);
 			path = "Final project";
 			sourceTree = "<group>";
@@ -287,12 +296,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				658C29A1281B02C90002CAF2 /* RegisterView.swift in Sources */,
 				658C2995281AB72D0002CAF2 /* AccountCreationModel.swift in Sources */,
 				65E3F0A9280A821D001A1F4E /* ContentView.swift in Sources */,
 				658C2997281AB8110002CAF2 /* AppViewModel.swift in Sources */,
 				6556101C280E708D00455E40 /* Extensions.swift in Sources */,
 				659C62CC2817BD8600C1DEDC /* LoginRegisterView.swift in Sources */,
+				658C299D281AE7070002CAF2 /* NutritionKeys.swift in Sources */,
 				65E3F0A7280A821D001A1F4E /* Final_projectApp.swift in Sources */,
+				658C299F281AE74B0002CAF2 /* AddCalorieSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
