@@ -11,9 +11,9 @@ import Firebase
 
 struct LoginRegisterView: View {
     
-    @State var email: String
-    @State var password: String
-    @State var confirmationPassword: String
+    @State var email: String = ""
+    @State var password: String = ""
+    @State var confirmationPassword: String = ""
     @State var registerMode: Bool = false
     @State var isFocused: Bool = false
     @State var loggedIn: Bool = false
@@ -31,56 +31,32 @@ struct LoginRegisterView: View {
     }
     
     var body: some View {
-        Background {
-            VStack {
-                VStack(spacing: 10) {
-                    HStack {
-                        Image(systemName: "person.crop.circle.fill")
-                            .foregroundColor(color1)
-                            .frame(width: 44, height: 44)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
-                            .padding(.leading)
-                        
-                        TextField("Email".uppercased(), text: $email)
-                            .onTapGesture {
-                                isFocused = true
-                            }
-                            .keyboardType(.emailAddress)
-                            .font(.subheadline)
-                            .padding(.leading)
-                            .frame(height: 44)
-                        
+        NavigationView{
+            Background {
+                VStack {
+                    NavigationLink(destination: RegisterView(), isActive: $viewModel.registerStageTwo) {
+                        EmptyView()
                     }
-                    Divider().padding(.leading, 80)
-                    HStack {
-                        Image(systemName: "lock.fill")
-                            .foregroundColor(color1)
-                            .frame(width: 44, height: 44)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
-                            .padding(.leading)
-                        
-                        SecureField("Password".uppercased(), text: $password) {
-                            if !registerMode {
-                                viewModel.signIn(email: email, password: password)
-                                self.email = ""
-                                self.password = ""
-                            }
+                    VStack(spacing: 10) {
+                        HStack {
+                            Image(systemName: "person.crop.circle.fill")
+                                .foregroundColor(color1)
+                                .frame(width: 44, height: 44)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                                .padding(.leading)
+                            
+                            TextField("Email".uppercased(), text: $email)
+                                .onTapGesture {
+                                    isFocused = true
+                                }
+                                .keyboardType(.emailAddress)
+                                .font(.subheadline)
+                                .padding(.leading)
+                                .frame(height: 44)
+                            
                         }
-                        .onTapGesture {
-                            isFocused = true
-                        }
-                        .keyboardType(.default)
-                        .font(.subheadline)
-                        .padding(.leading)
-                        .frame(height: 44)
-                        
-                    }
-                    
-                    if registerMode {
                         Divider().padding(.leading, 80)
                         HStack {
                             Image(systemName: "lock.fill")
@@ -91,10 +67,12 @@ struct LoginRegisterView: View {
                                 .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
                                 .padding(.leading)
                             
-                            SecureField("repeat password".uppercased(), text: $confirmationPassword) {
-                                viewModel.signIn(email: email, password: password)
-                                self.email = ""
-                                self.password = ""
+                            SecureField("Password".uppercased(), text: $password) {
+                                if !registerMode {
+                                    viewModel.signIn(email: email, password: password)
+                                    self.email = ""
+                                    self.password = ""
+                                }
                             }
                             .onTapGesture {
                                 isFocused = true
@@ -104,80 +82,104 @@ struct LoginRegisterView: View {
                             .padding(.leading)
                             .frame(height: 44)
                             
-                            
-                        }
-                    }
-                }
-                .frame(height: registerMode ? 195 : 136)
-                .frame(maxWidth: .infinity)
-                .background(color3)
-                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .shadow(color: color2.opacity(0.2), radius: 20, x: 0, y: 20)
-                .padding(.horizontal, 16)
-                
-                HStack {
-                    Button(action: {
-                        if registerMode {
-                            if password == confirmationPassword {
-                                if (password != "") && (confirmationPassword != "") {
-                                    viewModel.signUp(email: email, password: password)
-                                    
-                                    self.password = ""
-                                    self.confirmationPassword = ""
-                                } else {
-                                    viewModel.alert.toggle()
-                                    viewModel.errorMessage = "Please enter a password"
-                                }
-                            } else {
-                                viewModel.alert.toggle()
-                                viewModel.errorMessage = "Passwords don't match"
-                                self.password = ""
-                                self.confirmationPassword = ""
-                            }
-                        } else {
-                            withAnimation() {
-                                registerMode = true
-                            }
                         }
                         
-                    }) {
-                        Text("Register")
-                            .fontWeight(.semibold)
-                            .foregroundColor(color4)
-                            .frame(width: 120, height: 50, alignment: .center)
-                            .background(color3)
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
-                            .shadow(color: color2.opacity(0.2), radius: 5, x: 0, y: 5)
-                            .padding(.horizontal, 16)
-                    }
-                    Spacer()
-                    Button(action: {
                         if registerMode {
-                            withAnimation() {
-                                registerMode = false
+                            Divider().padding(.leading, 80)
+                            HStack {
+                                Image(systemName: "lock.fill")
+                                    .foregroundColor(color1)
+                                    .frame(width: 44, height: 44)
+                                    .background(Color.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                    .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                                    .padding(.leading)
+                                
+                                SecureField("repeat password".uppercased(), text: $confirmationPassword) {
+                                    viewModel.signIn(email: email, password: password)
+                                    self.email = ""
+                                    self.password = ""
+                                }
+                                .onTapGesture {
+                                    isFocused = true
+                                }
+                                .keyboardType(.default)
+                                .font(.subheadline)
+                                .padding(.leading)
+                                .frame(height: 44)
+                                
+                                
                             }
-                        } else {
-                            viewModel.signIn(email: email, password: password)
                         }
-                    }) {
-                        Text("Login")
-                            .fontWeight(.semibold)
-                            .foregroundColor(color4)
-                            .frame(width: 120, height: 50, alignment: .center)
-                            .background(color3)
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
-                            .shadow(color: color2.opacity(0.2), radius: 5, x: 0, y: 5)
-                            .padding(.horizontal, 16)
                     }
-                    NavigationLink(destination: Text ("Test"), isActive: $loggedIn) {
-                        EmptyView()
+                    .frame(height: registerMode ? 195 : 136)
+                    .frame(maxWidth: .infinity)
+                    .background(color3)
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .shadow(color: color2.opacity(0.2), radius: 20, x: 0, y: 20)
+                    .padding(.horizontal, 16)
+                    
+                    HStack {
+                        Button(action: {
+                            if registerMode {
+                                if password == confirmationPassword {
+                                    if (password != "") && (confirmationPassword != "") {
+                                        viewModel.signUp(email: email, password: password)
+                                        
+                                        self.password = ""
+                                        self.confirmationPassword = ""
+                                    } else {
+                                        viewModel.alert.toggle()
+                                        viewModel.errorMessage = "Please enter a password"
+                                    }
+                                } else {
+                                    viewModel.alert.toggle()
+                                    viewModel.errorMessage = "Passwords don't match"
+                                    self.password = ""
+                                    self.confirmationPassword = ""
+                                }
+                            } else {
+                                withAnimation() {
+                                    registerMode = true
+                                }
+                            }
+                            
+                        }) {
+                            Text("Register")
+                                .fontWeight(.semibold)
+                                .foregroundColor(color4)
+                                .frame(width: 120, height: 50, alignment: .center)
+                                .background(color3)
+                                .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
+                                .shadow(color: color2.opacity(0.2), radius: 5, x: 0, y: 5)
+                                .padding(.horizontal, 16)
+                        }
+                        Spacer()
+                        Button(action: {
+                            if registerMode {
+                                withAnimation() {
+                                    registerMode = false
+                                }
+                            } else {
+                                viewModel.signIn(email: email, password: password)
+                            }
+                        }) {
+                            Text("Login")
+                                .fontWeight(.semibold)
+                                .foregroundColor(color4)
+                                .frame(width: 120, height: 50, alignment: .center)
+                                .background(color3)
+                                .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
+                                .shadow(color: color2.opacity(0.2), radius: 5, x: 0, y: 5)
+                                .padding(.horizontal, 16)
+                        }
                     }
+                    
+                    
                 }
-                
-                
+                .autocapitalization(.none)
+                .offset(y: (isFocused && registerMode) ? -29 : 0).animation(.easeInOut)
             }
-            .autocapitalization(.none)
-            .offset(y: (isFocused && registerMode) ? -29 : 0).animation(.easeInOut)
         }.onTapGesture {
             isFocused = false
             UIApplication.shared.endEditing()

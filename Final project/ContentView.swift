@@ -22,8 +22,8 @@ struct ContentView: View {
                 MainView()
             }
             else {
-//                LoginRegisterView(email: "", password: "", confirmationPassword: "")
-                RegisterView(email: "", password: "", confirmationPassword: "")
+                LoginRegisterView()
+//                RegisterView()
             }
             
             if viewModel.isLoading {

@@ -16,6 +16,7 @@ class AppViewModel: ObservableObject {
     @Published var alert = false
     @Published var errorMessage = ""
     @Published var isLoading = false
+    @Published var registerStageTwo = false
     
     var isSignedIn : Bool {
     return auth.currentUser != nil
@@ -57,10 +58,32 @@ class AppViewModel: ObservableObject {
                 //self.isSuccessful = true
                 print("Registered")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                    self?.signedIn = true
+//                    self?.signedIn = true
+                    self?.registerStageTwo.toggle()
                 }
                 
             }
+        }
+    }
+    
+    func saveDetails(age : String, height : String, weight : String, gender : String, goal : String) {
+        isLoading.toggle()
+        let db = Firestore.firestore()
+        db.collection("users").document(Auth.auth().currentUser!.uid).setData([
+            "Age": age,
+            "Height":height,
+            "Weight":weight,
+            "Gender":gender,
+            "Goal":goal,
+        ]) { (err) in
+            if err != nil{
+                self.isLoading.toggle()
+                self.errorMessage = err!.localizedDescription
+                self.alert.toggle()
+                return
+            }
+            self.isLoading.toggle()
+            self.signedIn = true
         }
     }
     

@@ -11,12 +11,12 @@ import Firebase
 
 struct RegisterView: View {
     
-    @State var email: String
-    @State var password: String
-    @State var confirmationPassword: String
-    @State var registerMode: Bool = false
+    @State var age = ""
+    @State private var weight = ""
+    @State var height = ""
+    @State var goal = ""
+    @State var gender = ""
     @State var isFocused: Bool = false
-    @State var loggedIn: Bool = false
     
     var color1 = Color(#colorLiteral(red: 0.3544496118, green: 0.3544496118, blue: 0.3544496118, alpha: 1))
     var color2 = Color(#colorLiteral(red: 0.1647058824, green: 0.1882352941, blue: 0.3882352941, alpha: 1))
@@ -43,11 +43,11 @@ struct RegisterView: View {
                             .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
                         
-                        TextField("Email".uppercased(), text: $email)
+                        TextField("AGE", text: $age)
                             .onTapGesture {
                                 isFocused = true
                             }
-                            .keyboardType(.emailAddress)
+                            .keyboardType(.numberPad)
                             .font(.subheadline)
                             .padding(.leading)
                             .frame(height: 44)
@@ -55,7 +55,31 @@ struct RegisterView: View {
                     }
                     Divider().padding(.leading, 80)
                     HStack {
-                        Image(systemName: "lock.fill")
+                        Image(systemName: "heart.text.square.fill")
+                            .foregroundColor(color1)
+                            .frame(width: 44, height: 44)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                            .padding(.leading)
+                        Picker("WEIGHT", selection: $weight) {
+                            ForEach(40 ..< 100) {
+                                Text("\($0) kg").tag("\($0) kg")
+                                }
+                            }
+                        .onTapGesture {
+                            isFocused = true
+                        }
+                        .keyboardType(.default)
+                        .font(.subheadline)
+                        .padding(.leading)
+                        .frame(height: 44)
+                        Spacer()
+                        
+                    }
+                    Divider().padding(.leading, 80)
+                    HStack {
+                        Image(systemName: "ruler.fill")
                             .foregroundColor(color1)
                             .frame(width: 44, height: 44)
                             .background(Color.white)
@@ -63,13 +87,11 @@ struct RegisterView: View {
                             .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
                         
-                        SecureField("Password".uppercased(), text: $password) {
-                            if !registerMode {
-                                viewModel.signIn(email: email, password: password)
-                                self.email = ""
-                                self.password = ""
+                        Picker("HEIGHT", selection: $height) {
+                            ForEach(140 ..< 200) {
+                                    Text("\($0) cm").tag("\($0) cm")
+                                }
                             }
-                        }
                         .onTapGesture {
                             isFocused = true
                         }
@@ -78,119 +100,92 @@ struct RegisterView: View {
                         .padding(.leading)
                         .frame(height: 44)
                         
+                        Spacer()
+                    }
+                    Divider().padding(.leading, 80)
+                    HStack {
+                        Image(systemName: "ruler.fill")
+                            .foregroundColor(color1)
+                            .frame(width: 44, height: 44)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                            .padding(.leading)
+                        
+                        Picker("GOAL", selection: $goal) {
+                            Text("GAIN WEIGHT").tag("GAIN WEIGHT")
+                            Text("MAINTAIN WEIGHT").tag("MAINTAIN WEIGHT")
+                            Text("LOOSE WEIGHT").tag("LOOSE WEIGHT")
+                            }
+                        .onTapGesture {
+                            isFocused = true
+                        }
+                        .keyboardType(.default)
+                        .font(.subheadline)
+                        .padding(.leading)
+                        .frame(height: 44)
+                        
+                        Spacer()
                     }
                     
-                    if registerMode {
-                        Divider().padding(.leading, 80)
-                        HStack {
-                            Image(systemName: "lock.fill")
-                                .foregroundColor(color1)
-                                .frame(width: 44, height: 44)
-                                .background(Color.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                                .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
-                                .padding(.leading)
-                            
-                            SecureField("repeat password".uppercased(), text: $confirmationPassword) {
-                                viewModel.signIn(email: email, password: password)
-                                self.email = ""
-                                self.password = ""
-                            }
-                            .onTapGesture {
-                                isFocused = true
-                            }
-                            .keyboardType(.default)
-                            .font(.subheadline)
+                    Divider().padding(.leading, 80)
+                    HStack {
+                        Image(systemName: "ruler.fill")
+                            .foregroundColor(color1)
+                            .frame(width: 44, height: 44)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
-                            .frame(height: 44)
-                            
-                            
+                        
+                        Picker("GENDER", selection: $gender) {
+                            Text("MALE").tag("MALE")
+                            Text("FEMALE").tag("FEMALE")
+                            }
+                        .onTapGesture {
+                            isFocused = true
                         }
+                        .keyboardType(.default)
+                        .font(.subheadline)
+                        .padding(.leading)
+                        .frame(height: 44)
+                        
+                        Spacer()
                     }
                 }
-                .frame(height: registerMode ? 195 : 136)
+                .frame(height: 325)
                 .frame(maxWidth: .infinity)
                 .background(color3)
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .shadow(color: color2.opacity(0.2), radius: 20, x: 0, y: 20)
                 .padding(.horizontal, 16)
                 
-                HStack {
-                    Button(action: {
-                        if registerMode {
-                            if password == confirmationPassword {
-                                if (password != "") && (confirmationPassword != "") {
-                                    viewModel.signUp(email: email, password: password)
-                                    
-                                    self.password = ""
-                                    self.confirmationPassword = ""
-                                } else {
-                                    viewModel.alert.toggle()
-                                    viewModel.errorMessage = "Please enter a password"
-                                }
-                            } else {
-                                viewModel.alert.toggle()
-                                viewModel.errorMessage = "Passwords don't match"
-                                self.password = ""
-                                self.confirmationPassword = ""
-                            }
-                        } else {
-                            withAnimation() {
-                                registerMode = true
-                            }
-                        }
-                        
-                    }) {
-                        Text("Register")
-                            .fontWeight(.semibold)
-                            .foregroundColor(color4)
-                            .frame(width: 120, height: 50, alignment: .center)
-                            .background(color3)
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
-                            .shadow(color: color2.opacity(0.2), radius: 5, x: 0, y: 5)
-                            .padding(.horizontal, 16)
-                    }
-                    Spacer()
-                    Button(action: {
-                        if registerMode {
-                            withAnimation() {
-                                registerMode = false
-                            }
-                        } else {
-                            viewModel.signIn(email: email, password: password)
-                        }
-                    }) {
-                        Text("Login")
-                            .fontWeight(.semibold)
-                            .foregroundColor(color4)
-                            .frame(width: 120, height: 50, alignment: .center)
-                            .background(color3)
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
-                            .shadow(color: color2.opacity(0.2), radius: 5, x: 0, y: 5)
-                            .padding(.horizontal, 16)
-                    }
-                    NavigationLink(destination: Text ("Test"), isActive: $loggedIn) {
-                        EmptyView()
-                    }
+                Button(action: {
+                    viewModel.saveDetails(age: age, height: height, weight: weight, gender: gender, goal: goal)
+                }) {
+                    Text("Continue")
+                        .fontWeight(.semibold)
+                        .foregroundColor(color4)
+                        .frame(width: 120, height: 50, alignment: .center)
+                        .background(color3)
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
+                        .shadow(color: color2.opacity(0.2), radius: 5, x: 0, y: 5)
+                        .padding(.horizontal, 16)
                 }
-                
+
                 
             }
             .autocapitalization(.none)
-            .offset(y: (isFocused && registerMode) ? -29 : 0).animation(.easeInOut)
         }.onTapGesture {
             isFocused = false
             UIApplication.shared.endEditing()
-        }
-        .alert(isPresented: $viewModel.alert) {
-            Alert(title: Text("Error"), message: Text(viewModel.errorMessage), dismissButton: .default(Text("Ok")))
         }
     }
 }
 
 struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
-        RegisterView(email: "", password: "", confirmationPassword: "")
+        RegisterView()
     }
 }
 
