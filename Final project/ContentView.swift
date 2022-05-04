@@ -178,7 +178,18 @@ struct HomeView: View {
                         Button(action: {
                             let randomValue = Float([0.012, 0.022, 0.034, 0.016, 0.11].randomElement()!)
                             progress += randomValue
-                            print(Auth.auth().currentUser?.uid)
+                            fetchData()
+//                            let db = Firestore.firestore()
+//                            db.collection("users").getDocuments() { (querySnapshot, error) in
+//                                                    if let error = error {
+//                                                            print("Error getting documents: \(error)")
+//                                                    } else {
+//                                                            for document in querySnapshot!.documents {
+//                                                                    print("\(document.documentID): \(document.data())")
+//                                                            }
+//                                                    }
+//                                    }
+                            
                         }) {
                             HStack {
                                 Image(systemName: "plus.rectangle.fill")
@@ -230,6 +241,18 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Home")
+        }
+    }
+    func fetchData() {
+        let db = Firestore.firestore()
+        
+        db.collection("users").document(Auth.auth().currentUser!.uid).addSnapshotListener { (querySnapshot, error) in
+            guard let documents = querySnapshot else {
+                print("No documents")
+                return
+            }
+            let foods_eaten: NSDictionary = documents.get("Foods Eaten") as! NSDictionary
+            print(foods_eaten["Name"]!)
         }
     }
 }

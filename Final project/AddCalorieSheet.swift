@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
-
+import Firebase
 
 struct AddCalorieSheet: View {
     
-    @State var nutritions = [Nutrition]()
+    @State var nutritions = [Nutrition]() 
     @StateObject var globalString = GlobalString()
     @State private var searchText: String = ""
+    @State var foods_eaten: [NSDictionary] = []
+    @State var detailed_nutrition = [DetailedNutrition]()
+    @State var group = DispatchGroup()
     
     @Binding var progress: Float
     @Binding var foodEaten_name: [String]
@@ -27,11 +30,37 @@ struct AddCalorieSheet: View {
                 ForEach(nutritions, id: \.self) {nutrition in
                     
                     Button(action: {
-                        progress += (Float(nutrition.nf_calories) / Float(globalString.totalCalory))
-                        presentationMode.wrappedValue.dismiss()
-                        foodEaten_calorie.append(nutrition.nf_calories)
-                        foodEaten_image.append(nutrition.photo.thumb)
-                        foodEaten_name.append(nutrition.food_name)
+                        self.group.enter()
+                        
+                        search_item(nix_id: nutrition.nix_item_id)
+                        self.group.notify(queue: .main){
+                            progress += (Float(nutrition.nf_calories) / Float(globalString.totalCalory))
+                            presentationMode.wrappedValue.dismiss()
+                            foodEaten_calorie.append(nutrition.nf_calories)
+                            foodEaten_image.append(nutrition.photo.thumb)
+                            foodEaten_name.append(nutrition.food_name)
+                            
+                            let db = Firestore.firestore()
+                            db.collection("users").document(Auth.auth().currentUser!.uid).setData([
+                                "Foods Eaten": [ nutrition.food_name : [
+                                    "Calorie":nutrition.nf_calories,
+                                    "Image": nutrition.photo.thumb,
+                                    "Protein": self.detailed_nutrition[0].nf_protein,
+                                    "Fat": self.detailed_nutrition[0].nf_total_fat,
+                                    "Carbs": self.detailed_nutrition[0].nf_total_carbohydrate,
+                                    "Sugar": self.detailed_nutrition[0].nf_sugars
+                                ]]
+                            ], merge: true) { (err) in
+                                if err != nil{
+                                    print(err!.localizedDescription)
+                                }
+                            }
+                        }
+                        
+                        
+                        
+                        
+                        
                     }, label: {
                         HStack{
                             let photo_url = URL(string: nutrition.photo.thumb)
@@ -118,6 +147,7 @@ struct AddCalorieSheet: View {
         request.setValue("274757a70dbb78be6611d630f168f4fe", forHTTPHeaderField:"x-app-key")
         request.setValue("0", forHTTPHeaderField:"x-remote-user-id")
         request.timeoutInterval = 60.0
+
         
         let task = URLSession.shared.dataTask(with: request) { data, _,
             error in
@@ -126,9 +156,10 @@ struct AddCalorieSheet: View {
             }
             
             do {
-                let nutritions = try JSONDecoder().decode(NutritionResponse.self, from: data)
+                let nutritions = try JSONDecoder().decode(DetailedResponse.self, from: data)
                 DispatchQueue.main.async {
-                    self.nutritions = nutritions.branded
+                    self.detailed_nutrition = nutritions.foods
+                    self.group.leave()
                 }
             }
             catch {

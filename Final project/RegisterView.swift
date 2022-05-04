@@ -63,6 +63,7 @@ struct RegisterView: View {
                             .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
                         Picker("WEIGHT", selection: $weight) {
+                            Text("Choose")
                             ForEach(40 ..< 100) {
                                 Text("\($0) kg").tag("\($0) kg")
                                 }
@@ -88,6 +89,7 @@ struct RegisterView: View {
                             .padding(.leading)
                         
                         Picker("HEIGHT", selection: $height) {
+                            Text("Choose")
                             ForEach(140 ..< 200) {
                                     Text("\($0) cm").tag("\($0) cm")
                                 }
@@ -113,6 +115,7 @@ struct RegisterView: View {
                             .padding(.leading)
                         
                         Picker("GOAL", selection: $goal) {
+                            Text("Choose")
                             Text("GAIN WEIGHT").tag("GAIN WEIGHT")
                             Text("MAINTAIN WEIGHT").tag("MAINTAIN WEIGHT")
                             Text("LOOSE WEIGHT").tag("LOOSE WEIGHT")
@@ -139,6 +142,7 @@ struct RegisterView: View {
                             .padding(.leading)
                         
                         Picker("GENDER", selection: $gender) {
+                            Text("Choose")
                             Text("MALE").tag("MALE")
                             Text("FEMALE").tag("FEMALE")
                             }

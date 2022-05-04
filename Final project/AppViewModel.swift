@@ -74,7 +74,7 @@ class AppViewModel: ObservableObject {
             "Height":height,
             "Weight":weight,
             "Gender":gender,
-            "Goal":goal,
+            "Goal":goal
         ]) { (err) in
             if err != nil{
                 self.isLoading.toggle()
@@ -84,6 +84,7 @@ class AppViewModel: ObservableObject {
             }
             self.isLoading.toggle()
             self.signedIn = true
+            self.registerStageTwo.toggle()
         }
     }
     

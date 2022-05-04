@@ -30,3 +30,8 @@ struct DetailedNutrition: Hashable, Codable {
     let nf_protein: Double
     let nf_sugars: Double
 }
+
+
+struct DetailedResponse: Hashable, Codable{
+    let foods: [DetailedNutrition]
+}
