@@ -23,7 +23,6 @@ struct ContentView: View {
             }
             else {
                 LoginRegisterView()
-//                RegisterView()
             }
             
             if viewModel.isLoading {
@@ -46,10 +45,6 @@ struct MainView: View {
     @State var presented = false
     
     @State var progress: Float = 0.0
-    
-    @State var foodEaten_name: [String] = []
-    @State var foodEaten_calorie: [Double] = []
-    @State var foodEaten_image: [String] = []
 
     let icons = [
         "house",
@@ -73,7 +68,7 @@ struct MainView: View {
             ZStack{
                 switch selectedIndex{
                 case 0:
-                    HomeView(progress: $progress, foodEaten_name: $foodEaten_name, foodEaten_calorie: $foodEaten_calorie, foodEaten_image: $foodEaten_image)
+                    HomeView(progress: $progress)
                     
                 case 1:
                     NavigationView{
@@ -146,7 +141,7 @@ struct MainView: View {
 
         }
         .sheet(isPresented: $presented, content: {
-            AddCalorieSheet(progress: $progress, foodEaten_name: $foodEaten_name, foodEaten_calorie: $foodEaten_calorie, foodEaten_image: $foodEaten_image)
+            AddCalorieSheet(progress: $progress)
         })
         .background(backgroundColor)
         
@@ -155,9 +150,10 @@ struct MainView: View {
 
 struct HomeView: View {
     @Binding var progress: Float
-    @Binding var foodEaten_name: [String]
-    @Binding var foodEaten_calorie: [Double]
-    @Binding var foodEaten_image: [String]
+//    @Binding var foodEaten_name: [String]
+//    @Binding var foodEaten_calorie: [Double]
+//    @Binding var foodEaten_image: [String]
+    
     
     @EnvironmentObject var viewModel: AppViewModel
     
@@ -179,16 +175,6 @@ struct HomeView: View {
                             let randomValue = Float([0.012, 0.022, 0.034, 0.016, 0.11].randomElement()!)
                             progress += randomValue
                             fetchData()
-//                            let db = Firestore.firestore()
-//                            db.collection("users").getDocuments() { (querySnapshot, error) in
-//                                                    if let error = error {
-//                                                            print("Error getting documents: \(error)")
-//                                                    } else {
-//                                                            for document in querySnapshot!.documents {
-//                                                                    print("\(document.documentID): \(document.data())")
-//                                                            }
-//                                                    }
-//                                    }
                             
                         }) {
                             HStack {
@@ -212,9 +198,9 @@ struct HomeView: View {
                             Spacer()
                         }
                         
-                        ForEach(0..<foodEaten_name.count, id: \.self) { number in
+                        ForEach(0..<viewModel.foodEaten_name.count, id: \.self) { number in
                             HStack {
-                                let photo_url = URL(string: foodEaten_image[number])
+                                let photo_url = URL(string: viewModel.foodEaten_image[number])
                                 AsyncImage(url: photo_url, content: { image in
                                     image.resizable()
                                         .aspectRatio(contentMode: .fit)
@@ -224,11 +210,11 @@ struct HomeView: View {
                                 })
                                 .padding()
                                 Spacer()
-                                Text(foodEaten_name[number])
+                                Text(viewModel.foodEaten_name[number])
                                     .bold()
                                     .foregroundColor(.textColor)
                                 Spacer()
-                                Text("\(foodEaten_calorie[number], specifier: "%.2f") kcal")
+                                Text("\(viewModel.foodEaten_calorie[number], specifier: "%.2f") kcal")
                                     .bold()
                                     .foregroundColor(Color.textColor)
                             }
@@ -241,6 +227,7 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Home")
+            .onAppear(perform: viewModel.load)
         }
     }
     func fetchData() {
@@ -252,7 +239,7 @@ struct HomeView: View {
                 return
             }
             let foods_eaten: NSDictionary = documents.get("Foods Eaten") as! NSDictionary
-            print(foods_eaten["Name"]!)
+//            print(foods_eaten["Name"]!)
         }
     }
 }
@@ -274,6 +261,16 @@ struct ProgressBar: View {
                 .foregroundColor(Color.red)
                 .rotationEffect(Angle(degrees: 270.0))
                 .animation(.linear, value: self.progress)
+            
+            
+        
+            Circle()
+                .trim(from: 0.0, to: CGFloat(min(0.5, 1.0)))
+                .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
+                .foregroundColor(Color.blue)
+                .rotationEffect(Angle(degrees: 270.0))
+                .animation(.linear, value: 0.5)
+            
             
             VStack {
                 Text(String(format: "%.0f %", max(Float(globalString.totalCalory) - (self.progress * Float(globalString.totalCalory)), 0.0)))

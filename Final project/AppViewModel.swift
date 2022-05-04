@@ -18,6 +18,12 @@ class AppViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var registerStageTwo = false
     
+    @Published var foodEaten_name: [String] = []
+    @Published var foodEaten_calorie: [Double] = []
+    @Published var foodEaten_image: [String] = []
+    
+    private let defaults = UserDefaults.standard
+    
     var isSignedIn : Bool {
     return auth.currentUser != nil
     }
@@ -100,5 +106,21 @@ class AppViewModel: ObservableObject {
                 
             }
         }
+    }
+    
+    func save() {
+        
+        defaults.set(foodEaten_calorie, forKey: "foodEaten_calorie")
+        defaults.set(foodEaten_image, forKey: "foodEaten_image")
+        defaults.set(foodEaten_name, forKey: "foodEaten_name")
+    }
+    
+    func load(){
+        if defaults.value(forKey: "foodEaten_calorie") != nil{
+            foodEaten_calorie = defaults.value(forKey: "foodEaten_calorie") as! [Double]
+            foodEaten_name = defaults.value(forKey: "foodEaten_name") as! [String]
+            foodEaten_image = defaults.value(forKey: "foodEaten_image") as! [String]
+        }
+        
     }
 }

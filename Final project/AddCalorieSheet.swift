@@ -16,91 +16,112 @@ struct AddCalorieSheet: View {
     @State var foods_eaten: [NSDictionary] = []
     @State var detailed_nutrition = [DetailedNutrition]()
     @State var group = DispatchGroup()
+    @State var searchTapped = false
     
     @Binding var progress: Float
-    @Binding var foodEaten_name: [String]
-    @Binding var foodEaten_calorie: [Double]
-    @Binding var foodEaten_image: [String]
+    
+    @EnvironmentObject var viewModel: AppViewModel
     
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        NavigationView{
-            List {
-                ForEach(nutritions, id: \.self) {nutrition in
-                    
-                    Button(action: {
-                        self.group.enter()
+        HStack{
+            NavigationView{
+                List {
+                    ForEach(nutritions, id: \.self) {nutrition in
                         
-                        search_item(nix_id: nutrition.nix_item_id)
-                        self.group.notify(queue: .main){
-                            progress += (Float(nutrition.nf_calories) / Float(globalString.totalCalory))
-                            presentationMode.wrappedValue.dismiss()
-                            foodEaten_calorie.append(nutrition.nf_calories)
-                            foodEaten_image.append(nutrition.photo.thumb)
-                            foodEaten_name.append(nutrition.food_name)
+                        Button(action: {
+                            self.group.enter()
                             
-                            let db = Firestore.firestore()
-                            db.collection("users").document(Auth.auth().currentUser!.uid).setData([
-                                "Foods Eaten": [ nutrition.food_name : [
-                                    "Calorie":nutrition.nf_calories,
-                                    "Image": nutrition.photo.thumb,
-                                    "Protein": self.detailed_nutrition[0].nf_protein,
-                                    "Fat": self.detailed_nutrition[0].nf_total_fat,
-                                    "Carbs": self.detailed_nutrition[0].nf_total_carbohydrate,
-                                    "Sugar": self.detailed_nutrition[0].nf_sugars
-                                ]]
-                            ], merge: true) { (err) in
-                                if err != nil{
-                                    print(err!.localizedDescription)
+                            search_item(nix_id: nutrition.nix_item_id)
+                            self.group.notify(queue: .main){
+                                progress += (Float(nutrition.nf_calories) / Float(globalString.totalCalory))
+                                presentationMode.wrappedValue.dismiss()
+                                viewModel.foodEaten_calorie.append(nutrition.nf_calories)
+                                viewModel.foodEaten_image.append(nutrition.photo.thumb)
+                                viewModel.foodEaten_name.append(nutrition.food_name)
+                                
+                                viewModel.save()
+                                
+                                viewModel.load()
+                                
+                                let db = Firestore.firestore()
+                                db.collection("users").document(Auth.auth().currentUser!.uid).setData([
+                                    "Foods Eaten": [ nutrition.food_name : [
+                                        "Calorie":nutrition.nf_calories,
+                                        "Image": nutrition.photo.thumb,
+                                        "Protein": self.detailed_nutrition[0].nf_protein,
+                                        "Fat": self.detailed_nutrition[0].nf_total_fat,
+                                        "Carbs": self.detailed_nutrition[0].nf_total_carbohydrate,
+                                        "Sugar": self.detailed_nutrition[0].nf_sugars
+                                    ]]
+                                ], merge: true) { (err) in
+                                    if err != nil{
+                                        print(err!.localizedDescription)
+                                    }
                                 }
                             }
-                        }
-                        
-                        
-                        
-                        
-                        
-                    }, label: {
-                        HStack{
-                            let photo_url = URL(string: nutrition.photo.thumb)
-                            AsyncImage(url: photo_url, content: { image in
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: 60)
-                            }, placeholder: {
-                                ProgressView()
-                            })
-                            VStack {
-                                HStack {
-                                    Text(nutrition.food_name)
-                                    Spacer()
-                                }
-                                HStack {
-                                    Text("\(nutrition.serving_qty, specifier: "%.2f") \(nutrition.serving_unit)")
-                                    Spacer()
-                                }
-                            }
-                            Spacer()
-                            Text("\(nutrition.nf_calories, specifier: "%.2f") kcal")
                             
-                        }
-                    })
-                    
-                }
-            }
-            .navigationTitle("Add Food")
-            .listStyle(.plain)
-            .searchable(text: $searchText)
-            .onChange(of: searchText) { value in
-                async {
-                    if !value.isEmpty && value.count > 3 {
-                        await fetch(searchTerm: value)
-                    } else {
-                        nutritions.removeAll()
+                            
+                            
+                            
+                            
+                        }, label: {
+                            HStack{
+                                let photo_url = URL(string: nutrition.photo.thumb)
+                                AsyncImage(url: photo_url, content: { image in
+                                    image.resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(maxWidth: 60)
+                                }, placeholder: {
+                                    ProgressView()
+                                })
+                                VStack {
+                                    HStack {
+                                        Text(nutrition.food_name)
+                                        Spacer()
+                                    }
+                                    HStack {
+                                        Text("\(nutrition.serving_qty, specifier: "%.2f") \(nutrition.serving_unit)")
+                                        Spacer()
+                                    }
+                                }
+                                Spacer()
+                                Text("\(nutrition.nf_calories, specifier: "%.2f") kcal")
+                                
+                            }
+                        })
+                        
                     }
                 }
+                .navigationTitle("Add Food")
+                .listStyle(.plain)
+                .searchable(text: $searchText)
+                .onChange(of: searchText) { value in
+                    async {
+                        if !value.isEmpty && value.count > 3 {
+                            await fetch(searchTerm: value)
+                        } else {
+                            nutritions.removeAll()
+                        }
+                    }
+                }
+                
             }
+//            VStack{
+//                Button {
+//
+//                } label: {
+//                    Image(systemName: "barcode")
+//                        .font(.system(size: 20, weight: .regular, design: .default))
+//                        .foregroundColor(.white)
+//                        .frame(width: 40, height: 40)
+//                        .background(Color.textColor)
+//                        .cornerRadius(30)
+//                }
+//                .offset(x: -20,y: 110)
+//                Spacer()
+//            }
         }
     }
     
