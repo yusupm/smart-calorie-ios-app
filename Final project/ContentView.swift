@@ -174,7 +174,11 @@ struct HomeView: View {
                         Button(action: {
                             let randomValue = Float([0.012, 0.022, 0.034, 0.016, 0.11].randomElement()!)
                             progress += randomValue
-                            fetchData()
+//                            let formatter = DateFormatter()
+//                            formatter.dateFormat = "dd.MM.yy"
+//                            print(formatter.string(from: Date()))
+//                            fetchData()
+                            viewModel.delete()
                             
                         }) {
                             HStack {
@@ -218,7 +222,13 @@ struct HomeView: View {
                                     .bold()
                                     .foregroundColor(Color.textColor)
                             }
-                            .background(Rectangle().fill(Color.red).cornerRadius(10))
+                            .font(.headline)
+                            .padding()
+                            .background(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .fill(Color.backgroundColor)
+                                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 0)
+                            )
                         }
 //                        }
                         

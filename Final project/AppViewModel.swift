@@ -21,6 +21,7 @@ class AppViewModel: ObservableObject {
     @Published var foodEaten_name: [String] = []
     @Published var foodEaten_calorie: [Double] = []
     @Published var foodEaten_image: [String] = []
+    @Published var foodEaten_date: [String] = []
     
     private let defaults = UserDefaults.standard
     
@@ -121,6 +122,15 @@ class AppViewModel: ObservableObject {
             foodEaten_name = defaults.value(forKey: "foodEaten_name") as! [String]
             foodEaten_image = defaults.value(forKey: "foodEaten_image") as! [String]
         }
+        
+    }
+    
+    
+    func delete(){
+        let dictionary = defaults.dictionaryRepresentation()
+            dictionary.keys.forEach { key in
+                defaults.removeObject(forKey: key)
+            }
         
     }
 }

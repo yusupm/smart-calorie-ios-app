@@ -11,6 +11,9 @@ import SwiftUI
 struct NutritionResponse: Hashable, Codable {
     let branded: [Nutrition]
 }
+struct NutritionResponse2: Hashable, Codable {
+    let foods: [Nutrition]
+}
 struct Nutrition: Hashable, Codable {
     let food_name: String
     let nf_calories: Double
@@ -25,10 +28,10 @@ struct PhotoJson: Hashable, Codable {
 }
 
 struct DetailedNutrition: Hashable, Codable {
-    let nf_total_fat: Double
-    let nf_total_carbohydrate: Double
-    let nf_protein: Double
-    let nf_sugars: Double
+    let nf_total_fat: Double?
+    let nf_total_carbohydrate: Double?
+    let nf_protein: Double?
+    let nf_sugars: Double?
 }
 
 

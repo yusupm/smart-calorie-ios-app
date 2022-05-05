@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6543F87B2813E3960061D6E8 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6543F87A2813E3960061D6E8 /* GoogleService-Info.plist */; };
+		65518F5A2823CB6300CE461D /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 65518F592823CB6300CE461D /* CodeScanner */; };
 		6556101C280E708D00455E40 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6556101B280E708D00455E40 /* Extensions.swift */; };
 		6568EC57281CFA7100C5A63C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 6568EC56281CFA7100C5A63C /* FirebaseAnalyticsWithoutAdIdSupport */; };
 		6568EC59281CFA7100C5A63C /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 6568EC58281CFA7100C5A63C /* FirebaseAuth */; };
@@ -74,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65518F5A2823CB6300CE461D /* CodeScanner in Frameworks */,
 				6568EC5B281CFA7100C5A63C /* FirebaseDatabase in Frameworks */,
 				6568EC5D281CFA7100C5A63C /* FirebaseFirestore in Frameworks */,
 				6568EC57281CFA7100C5A63C /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
@@ -189,6 +191,7 @@
 				6568EC5E281CFA7100C5A63C /* FirebaseFirestoreCombine-Community */,
 				6568EC60281CFA7100C5A63C /* FirebaseFirestoreSwift-Beta */,
 				6568EC62281CFA7100C5A63C /* FirebaseStorage */,
+				65518F592823CB6300CE461D /* CodeScanner */,
 			);
 			productName = "Final project";
 			productReference = 65E3F0A3280A821D001A1F4E /* Final project.app */;
@@ -264,6 +267,7 @@
 			mainGroup = 65E3F09A280A821D001A1F4E;
 			packageReferences = (
 				6568EC55281CFA7100C5A63C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				65518F582823CB6300CE461D /* XCRemoteSwiftPackageReference "CodeScanner" */,
 			);
 			productRefGroup = 65E3F0A4280A821D001A1F4E /* Products */;
 			projectDirPath = "";
@@ -480,11 +484,13 @@
 				DEVELOPMENT_TEAM = 8X7C72A2S6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Accept to scan Bar code";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -509,11 +515,13 @@
 				DEVELOPMENT_TEAM = 8X7C72A2S6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Accept to scan Bar code";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -645,6 +653,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		65518F582823CB6300CE461D /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/CodeScanner";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		6568EC55281CFA7100C5A63C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -656,6 +672,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		65518F592823CB6300CE461D /* CodeScanner */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 65518F582823CB6300CE461D /* XCRemoteSwiftPackageReference "CodeScanner" */;
+			productName = CodeScanner;
+		};
 		6568EC56281CFA7100C5A63C /* FirebaseAnalyticsWithoutAdIdSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6568EC55281CFA7100C5A63C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
