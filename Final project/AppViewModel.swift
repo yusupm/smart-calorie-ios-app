@@ -17,11 +17,7 @@ class AppViewModel: ObservableObject {
     @Published var errorMessage = ""
     @Published var isLoading = false
     @Published var registerStageTwo = false
-    
-    @Published var foodEaten_name: [String] = []
-    @Published var foodEaten_calorie: [Double] = []
-    @Published var foodEaten_image: [String] = []
-    @Published var foodEaten_date: [String] = []
+    @Published var calorie_progress: Float = 0.0
     
     private let defaults = UserDefaults.standard
     
@@ -76,6 +72,8 @@ class AppViewModel: ObservableObject {
     func saveDetails(age : String, height : String, weight : String, gender : String, goal : String) {
         isLoading.toggle()
         let db = Firestore.firestore()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yy"
         db.collection("users").document(Auth.auth().currentUser!.uid).setData([
             "Age": age,
             "Height":height,
@@ -107,30 +105,5 @@ class AppViewModel: ObservableObject {
                 
             }
         }
-    }
-    
-    func save() {
-        
-        defaults.set(foodEaten_calorie, forKey: "foodEaten_calorie")
-        defaults.set(foodEaten_image, forKey: "foodEaten_image")
-        defaults.set(foodEaten_name, forKey: "foodEaten_name")
-    }
-    
-    func load(){
-        if defaults.value(forKey: "foodEaten_calorie") != nil{
-            foodEaten_calorie = defaults.value(forKey: "foodEaten_calorie") as! [Double]
-            foodEaten_name = defaults.value(forKey: "foodEaten_name") as! [String]
-            foodEaten_image = defaults.value(forKey: "foodEaten_image") as! [String]
-        }
-        
-    }
-    
-    
-    func delete(){
-        let dictionary = defaults.dictionaryRepresentation()
-            dictionary.keys.forEach { key in
-                defaults.removeObject(forKey: key)
-            }
-        
     }
 }

@@ -9,7 +9,7 @@ import SwiftUI
 import Firebase
 
 class GlobalString: ObservableObject {
-    @Published var totalCalory = 2500
+    @Published var totalCalorie: Float = 2500
 }
 
 
@@ -44,7 +44,6 @@ struct MainView: View {
     @State var selectedIndex = 0
     @State var presented = false
     
-    @State var progress: Float = 0.0
 
     let icons = [
         "house",
@@ -68,7 +67,7 @@ struct MainView: View {
             ZStack{
                 switch selectedIndex{
                 case 0:
-                    HomeView(progress: $progress)
+                    HomeView()
                     
                 case 1:
                     NavigationView{
@@ -141,7 +140,7 @@ struct MainView: View {
 
         }
         .sheet(isPresented: $presented, content: {
-            AddCalorieSheet(progress: $progress)
+            AddCalorieSheet()
         })
         .background(backgroundColor)
         
@@ -149,13 +148,12 @@ struct MainView: View {
 }
 
 struct HomeView: View {
-    @Binding var progress: Float
-//    @Binding var foodEaten_name: [String]
-//    @Binding var foodEaten_calorie: [Double]
-//    @Binding var foodEaten_image: [String]
     
     
     @EnvironmentObject var viewModel: AppViewModel
+    @State var foods_eaten: NSDictionary = [:]
+    @State var todays_foods: NSDictionary = [:]
+    @State var formatter = DateFormatter()
     
     var body: some View{
         
@@ -167,18 +165,17 @@ struct HomeView: View {
                 
                 ScrollView {
                     VStack {
-                        ProgressBar(progress: $progress)
+                        ProgressBar()
                             .frame(width: 250.0, height: 250.0)
                             .padding(40.0)
                         
                         Button(action: {
-                            let randomValue = Float([0.012, 0.022, 0.034, 0.016, 0.11].randomElement()!)
-                            progress += randomValue
+                            viewModel.calorie_progress += 100
 //                            let formatter = DateFormatter()
 //                            formatter.dateFormat = "dd.MM.yy"
 //                            print(formatter.string(from: Date()))
-//                            fetchData()
-                            viewModel.delete()
+//                            viewModel.delete()
+                            test()
                             
                         }) {
                             HStack {
@@ -201,62 +198,88 @@ struct HomeView: View {
                             .foregroundColor(.textColor)
                             Spacer()
                         }
-                        
-                        ForEach(0..<viewModel.foodEaten_name.count, id: \.self) { number in
-                            HStack {
-                                let photo_url = URL(string: viewModel.foodEaten_image[number])
-                                AsyncImage(url: photo_url, content: { image in
-                                    image.resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(maxWidth: 60)
-                                }, placeholder: {
-                                    ProgressView()
-                                })
-                                .padding()
-                                Spacer()
-                                Text(viewModel.foodEaten_name[number])
-                                    .bold()
-                                    .foregroundColor(.textColor)
-                                Spacer()
-                                Text("\(viewModel.foodEaten_calorie[number], specifier: "%.2f") kcal")
-                                    .bold()
-                                    .foregroundColor(Color.textColor)
+                        if self.foods_eaten[formatter.string(from: Date())] != nil{
+                            let all_keys1 = todays_foods.allKeys
+                            let all_keys = all_keys1.filter { $0 as! String != "Total Calories" }
+                            ForEach(0..<all_keys.count, id: \.self){number in
+                                
+                                let food = todays_foods[all_keys[number]] as! NSDictionary
+                                let checked = checkTime(date: food["Date"] as! String)
+                                if checked{
+                                    HStack {
+                                        let photo_url = URL(string: food["Image"] as! String)
+                                        AsyncImage(url: photo_url, content: { image in
+                                            image.resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(maxWidth: 60)
+                                        }, placeholder: {
+                                            ProgressView()
+                                        })
+                                        .padding()
+                                        Spacer()
+                                        Text(todays_foods.allKeys[number] as! String)
+                                            .bold()
+                                            .foregroundColor(.textColor)
+                                        Spacer()
+                                        Text("\(food["Calorie"] as! Double, specifier: "%.2f") kcal")
+                                            .bold()
+                                            .foregroundColor(Color.textColor)
+                                    }
+                                    .font(.headline)
+                                    .padding()
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 25)
+                                            .fill(Color.backgroundColor)
+                                            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 0)
+                                    )
+                                }
                             }
-                            .font(.headline)
-                            .padding()
-                            .background(
-                                RoundedRectangle(cornerRadius: 25)
-                                    .fill(Color.backgroundColor)
-                                    .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 0)
-                            )
                         }
-//                        }
-                        
-                        
                     }
                 }
             }
             .navigationTitle("Home")
-            .onAppear(perform: viewModel.load)
+            .onAppear{
+                fetchData()
+                formatter.dateFormat = "dd.MM.yy"
+            }
         }
     }
     func fetchData() {
         let db = Firestore.firestore()
-        
         db.collection("users").document(Auth.auth().currentUser!.uid).addSnapshotListener { (querySnapshot, error) in
             guard let documents = querySnapshot else {
                 print("No documents")
                 return
             }
-            let foods_eaten: NSDictionary = documents.get("Foods Eaten") as! NSDictionary
-//            print(foods_eaten["Name"]!)
+            self.foods_eaten = documents.get("Foods Eaten") as! NSDictionary
+            if self.foods_eaten[formatter.string(from: Date())] != nil{
+                self.todays_foods = self.foods_eaten[formatter.string(from: Date())] as! NSDictionary
+                viewModel.calorie_progress = todays_foods["Total Calories"] as! Float
+            }
         }
+    }
+    
+    func checkTime(date: String) -> Bool{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yy"
+        
+        if date == formatter.string(from: Date()){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+    
+    func test(){
+        let db = Firestore.firestore()
     }
 }
 
 struct ProgressBar: View {
-    @Binding var progress: Float
     @StateObject var globalString = GlobalString()
+    @EnvironmentObject var viewModel: AppViewModel
     
     var body: some View {
         ZStack {
@@ -266,24 +289,24 @@ struct ProgressBar: View {
                 .foregroundColor(Color.trackColor)
             
             Circle()
-                .trim(from: 0.0, to: CGFloat(min(self.progress, 1.0)))
+                .trim(from: 0.0, to: CGFloat(min(viewModel.calorie_progress / globalString.totalCalorie, 1.0)))
                 .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
                 .foregroundColor(Color.red)
                 .rotationEffect(Angle(degrees: 270.0))
-                .animation(.linear, value: self.progress)
+                .animation(.linear, value: viewModel.calorie_progress / globalString.totalCalorie)
             
             
         
-            Circle()
-                .trim(from: 0.0, to: CGFloat(min(0.5, 1.0)))
-                .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
-                .foregroundColor(Color.blue)
-                .rotationEffect(Angle(degrees: 270.0))
-                .animation(.linear, value: 0.5)
+//            Circle()
+//                .trim(from: 0.0, to: CGFloat(min(0.5, 1.0)))
+//                .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
+//                .foregroundColor(Color.blue)
+//                .rotationEffect(Angle(degrees: 270.0))
+//                .animation(.linear, value: 0.5)
             
             
             VStack {
-                Text(String(format: "%.0f %", max(Float(globalString.totalCalory) - (self.progress * Float(globalString.totalCalory)), 0.0)))
+                Text(String(format: "%.0f %", max(globalString.totalCalorie - viewModel.calorie_progress, 0.0)))
                     .font(.system(size: 55))
                     .foregroundColor(.textColor)
                     .fontWeight(.heavy)

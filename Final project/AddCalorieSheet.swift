@@ -20,7 +20,6 @@ struct AddCalorieSheet: View {
     
     @State private var isShowingScanner = false
     
-    @Binding var progress: Float
     
     @EnvironmentObject var viewModel: AppViewModel
     
@@ -76,30 +75,27 @@ struct AddCalorieSheet: View {
                                 
                                 search_item(nix_id: nutrition.nix_item_id)
                                 self.group.notify(queue: .main){
-                                    progress += (Float(nutrition.nf_calories) / Float(globalString.totalCalory))
+//                                    viewModel.calorie_progress += Float(nutrition.nf_calories)
                                     presentationMode.wrappedValue.dismiss()
-                                    viewModel.foodEaten_calorie.append(nutrition.nf_calories)
-                                    viewModel.foodEaten_image.append(nutrition.photo.thumb)
-                                    viewModel.foodEaten_name.append(nutrition.food_name)
                                     let formatter = DateFormatter()
                                     formatter.dateFormat = "dd.MM.yy"
-                                    viewModel.foodEaten_date.append(formatter.string(from: Date()))
-                                    
-                                    
-                                    viewModel.save()
-                                    
-                                    viewModel.load()
                                     
                                     let db = Firestore.firestore()
                                     db.collection("users").document(Auth.auth().currentUser!.uid).setData([
-                                        "Foods Eaten": [ nutrition.food_name : [
-                                            "Calorie":nutrition.nf_calories,
-                                            "Image": nutrition.photo.thumb,
-                                            "Protein": self.detailed_nutrition[0].nf_protein,
-                                            "Fat": self.detailed_nutrition[0].nf_total_fat,
-                                            "Carbs": self.detailed_nutrition[0].nf_total_carbohydrate,
-                                            "Sugar": self.detailed_nutrition[0].nf_sugars
-                                        ]]
+                                        "Foods Eaten": [
+                                            formatter.string(from: Date()):[
+                                                "Total Calories": viewModel.calorie_progress + Float(nutrition.nf_calories),
+                                                nutrition.food_name : [
+                                                    "Calorie":nutrition.nf_calories,
+                                                    "Image": nutrition.photo.thumb,
+                                                    "Protein": self.detailed_nutrition[0].nf_protein,
+                                                    "Fat": self.detailed_nutrition[0].nf_total_fat,
+                                                    "Carbs": self.detailed_nutrition[0].nf_total_carbohydrate,
+                                                    "Sugar": self.detailed_nutrition[0].nf_sugars,
+                                                    "Date":formatter.string(from: Date())
+                                                ]
+                                            ]
+                                        ]
                                     ], merge: true) { (err) in
                                         if err != nil{
                                             print(err!.localizedDescription)
