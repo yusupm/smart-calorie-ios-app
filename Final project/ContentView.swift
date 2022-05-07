@@ -85,25 +85,7 @@ struct MainView: View {
                         .navigationTitle("Progress")
                     }
                 default:
-                    NavigationView{
-                        VStack{
-                            Button {
-                                viewModel.signOut()
-                            } label: {
-                                HStack {
-                                    Image(systemName: "plus.rectangle.fill")
-                                    Text("Sign out")
-                                }
-                                .padding(15.0)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 15.0)
-                                        .stroke(lineWidth: 2.0)
-                                )
-                            }
-
-                        }
-                        .navigationTitle("Profile")
-                    }
+                    ProfilePageView()
                 }
             }
             Spacer()
@@ -171,11 +153,6 @@ struct HomeView: View {
                         
                         Button(action: {
                             viewModel.calorie_progress += 100
-//                            let formatter = DateFormatter()
-//                            formatter.dateFormat = "dd.MM.yy"
-//                            print(formatter.string(from: Date()))
-//                            viewModel.delete()
-                            test()
                             
                         }) {
                             HStack {
@@ -271,10 +248,6 @@ struct HomeView: View {
             return false
         }
     }
-    
-    func test(){
-        let db = Firestore.firestore()
-    }
 }
 
 struct ProgressBar: View {
@@ -313,7 +286,7 @@ struct ProgressBar: View {
                     .bold()
                 Text("KCAL LEFT")
                     .font(.system(size: 15))
-                    .foregroundColor(.textColor1)
+                    .foregroundColor(Color.foregroundColor)
             }
         }
     }
@@ -330,13 +303,6 @@ struct LoadingScreen: View {
                 .background(Color.backgroundColor)
                 .cornerRadius(10)
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            
     }
 }
 

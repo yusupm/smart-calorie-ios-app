@@ -18,11 +18,6 @@ struct RegisterView: View {
     @State var gender = ""
     @State var isFocused: Bool = false
     
-    var color1 = Color(#colorLiteral(red: 0.3544496118, green: 0.3544496118, blue: 0.3544496118, alpha: 1))
-    var color2 = Color(#colorLiteral(red: 0.1647058824, green: 0.1882352941, blue: 0.3882352941, alpha: 1))
-    var color3 = Color(#colorLiteral(red: 0.974566576, green: 0.974566576, blue: 0.974566576, alpha: 1))
-    var color4 = Color(#colorLiteral(red: 0.2549019754, green: 0.2745098174, blue: 0.3019607961, alpha: 1))
-    
     
     @EnvironmentObject var viewModel: AppViewModel
     
@@ -36,11 +31,11 @@ struct RegisterView: View {
                 VStack(spacing: 10) {
                     HStack {
                         Image(systemName: "person.crop.circle.fill")
-                            .foregroundColor(color1)
+                            .foregroundColor(Color.foregroundColor)
                             .frame(width: 44, height: 44)
                             .background(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                            .shadow(color: Color.shadowColor.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
                         
                         TextField("AGE", text: $age)
@@ -56,11 +51,11 @@ struct RegisterView: View {
                     Divider().padding(.leading, 80)
                     HStack {
                         Image(systemName: "heart.text.square.fill")
-                            .foregroundColor(color1)
+                            .foregroundColor(Color.foregroundColor)
                             .frame(width: 44, height: 44)
                             .background(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                            .shadow(color: Color.shadowColor.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
                         Picker("WEIGHT", selection: $weight) {
                             Text("Choose")
@@ -81,11 +76,11 @@ struct RegisterView: View {
                     Divider().padding(.leading, 80)
                     HStack {
                         Image(systemName: "ruler.fill")
-                            .foregroundColor(color1)
+                            .foregroundColor(Color.foregroundColor)
                             .frame(width: 44, height: 44)
                             .background(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                            .shadow(color: Color.shadowColor.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
                         
                         Picker("HEIGHT", selection: $height) {
@@ -107,11 +102,11 @@ struct RegisterView: View {
                     Divider().padding(.leading, 80)
                     HStack {
                         Image(systemName: "ruler.fill")
-                            .foregroundColor(color1)
+                            .foregroundColor(Color.foregroundColor)
                             .frame(width: 44, height: 44)
                             .background(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                            .shadow(color: Color.shadowColor.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
                         
                         Picker("GOAL", selection: $goal) {
@@ -134,11 +129,11 @@ struct RegisterView: View {
                     Divider().padding(.leading, 80)
                     HStack {
                         Image(systemName: "ruler.fill")
-                            .foregroundColor(color1)
+                            .foregroundColor(Color.foregroundColor)
                             .frame(width: 44, height: 44)
                             .background(Color.white)
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                            .shadow(color: color2.opacity(0.1), radius: 5, x: 0, y: 5)
+                            .shadow(color: Color.shadowColor.opacity(0.1), radius: 5, x: 0, y: 5)
                             .padding(.leading)
                         
                         Picker("GENDER", selection: $gender) {
@@ -159,9 +154,9 @@ struct RegisterView: View {
                 }
                 .frame(height: 325)
                 .frame(maxWidth: .infinity)
-                .background(color3)
+                .background(Color.backgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                .shadow(color: color2.opacity(0.2), radius: 20, x: 0, y: 20)
+                .shadow(color: Color.shadowColor.opacity(0.2), radius: 20, x: 0, y: 20)
                 .padding(.horizontal, 16)
                 
                 Button(action: {
@@ -169,11 +164,11 @@ struct RegisterView: View {
                 }) {
                     Text("Continue")
                         .fontWeight(.semibold)
-                        .foregroundColor(color4)
+                        .foregroundColor(Color.textColor)
                         .frame(width: 120, height: 50, alignment: .center)
-                        .background(color3)
+                        .background(Color.backgroundColor)
                         .clipShape(RoundedRectangle(cornerRadius: 20, style: .circular))
-                        .shadow(color: color2.opacity(0.2), radius: 5, x: 0, y: 5)
+                        .shadow(color: Color.shadowColor.opacity(0.2), radius: 5, x: 0, y: 5)
                         .padding(.horizontal, 16)
                 }
 

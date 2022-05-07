@@ -79,7 +79,12 @@ class AppViewModel: ObservableObject {
             "Height":height,
             "Weight":weight,
             "Gender":gender,
-            "Goal":goal
+            "Goal":goal,
+            "Foods Eaten": [
+                formatter.string(from: Date()): [
+                    "Total Calories": 0
+                ]
+            ]
         ]) { (err) in
             if err != nil{
                 self.isLoading.toggle()
