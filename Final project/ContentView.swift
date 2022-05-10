@@ -88,6 +88,7 @@ struct MainView: View {
             }
             Spacer()
             Divider()
+
             HStack{
                 
                 ForEach(0..<5, id: \.self) { number in
@@ -148,21 +149,37 @@ struct HomeView: View {
                         ProgressBar()
                             .frame(width: 250.0, height: 250.0)
                             .padding(40.0)
-                        
-                        Button(action: {
-                            viewModel.calorie_progress += 100
-                            
-                        }) {
-                            HStack {
-                                Image(systemName: "plus.rectangle.fill")
-                                Text("Increment")
+                        HStack {
+                            Spacer()
+                            VStack {
+                                Capsule()
+                                    .fill(.red)
+                                    .frame(width: 70, height: 15)
+                                Text("Calorie")
                             }
-                            .padding(15.0)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15.0)
-                                    .stroke(lineWidth: 2.0)
-                            )
+                            Spacer()
+                            VStack {
+                                Capsule()
+                                    .fill(.blue)
+                                    .frame(width: 70, height: 15)
+                                Text("Protein")
+                            }
+                            Spacer()
                         }
+//                        Button(action: {
+//                            viewModel.calorie_progress += 100
+//
+//                        }) {
+//                            HStack {
+//                                Image(systemName: "plus.rectangle.fill")
+//                                Text("Increment")
+//                            }
+//                            .padding(15.0)
+//                            .overlay(
+//                                RoundedRectangle(cornerRadius: 15.0)
+//                                    .stroke(lineWidth: 2.0)
+//                            )
+//                        }
                         
                         Spacer()
                             .padding(5)
@@ -229,8 +246,11 @@ struct HomeView: View {
             }
             self.foods_eaten = documents.get("Foods Eaten") as! NSDictionary
             if self.foods_eaten[formatter.string(from: Date())] != nil{
-                self.todays_foods = self.foods_eaten[formatter.string(from: Date())] as! NSDictionary
-                viewModel.calorie_progress = todays_foods["Total Calories"] as! Float
+                let today = self.foods_eaten[formatter.string(from: Date())] as! NSDictionary
+                self.todays_foods = today["Foods"] as? NSDictionary ?? [:]
+                viewModel.calorie_progress = today["Total Calories"] as! Float
+                viewModel.total_weight = today["Total Weight"] as! Float
+                viewModel.total_protein = today["Total Protein"] as! Float
             }
         }
     }
@@ -269,11 +289,11 @@ struct ProgressBar: View {
             
         
             Circle()
-                .trim(from: 0.0, to: CGFloat(min((viewModel.calorie_progress / globalString.totalCalorie), 1.0)))
+                .trim(from: 0.0, to: CGFloat(min((viewModel.total_protein / viewModel.total_weight), 1.0)))
                 .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
                 .foregroundColor(Color.blue)
                 .rotationEffect(Angle(degrees: 270.0))
-                .animation(.linear, value: 0.5)
+                .animation(.linear, value: viewModel.total_protein / viewModel.total_weight)
             
             
             VStack {

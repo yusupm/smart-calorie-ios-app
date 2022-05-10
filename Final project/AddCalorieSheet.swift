@@ -11,7 +11,7 @@ import CodeScanner
 
 struct AddCalorieSheet: View {
     
-    @State var nutritions = [Nutrition]()
+//    @State var nutritions = [Nutrition]()
     @StateObject var globalString = GlobalString()
     @State private var searchText: String = ""
     @State var foods_eaten: [NSDictionary] = []
@@ -28,13 +28,17 @@ struct AddCalorieSheet: View {
     var body: some View{
             NavigationView{
                 VStack{
-                    NavigationLink(destination: CodeScannerView(codeTypes: [.ean8, .ean13],simulatedData: "5060245605397", completion: handleScan), isActive: $isShowingScanner) {
+                    NavigationLink(destination: CodeScannerView(codeTypes: [.ean8, .ean13], completion: handleScan), isActive: $isShowingScanner) {
                         EmptyView()
                     }
+                    NavigationLink(destination: CameraView(), isActive: $viewModel.isShowingCamera) {
+                        EmptyView()
+                    }
+                    
                     HStack{
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(Color.foregroundColor)
-                        TextField("Test", text: $searchText)
+                        TextField("Search", text: $searchText)
                             .foregroundColor(Color.foregroundColor)
                             .disableAutocorrection(true)
                             .overlay(
@@ -58,6 +62,17 @@ struct AddCalorieSheet: View {
                                 .background(Color.textColor)
                                 .cornerRadius(30)
                         }
+                        
+                        Button {
+                            viewModel.isShowingCamera = true
+                        } label: {
+                            Image(systemName: "camera.viewfinder")
+                                .font(.system(size: 20, weight: .regular, design: .default))
+                                .foregroundColor(.white)
+                                .frame(width: 40, height: 40)
+                                .background(Color.textColor)
+                                .cornerRadius(30)
+                        }
                     }
                     .font(.headline)
                     .padding()
@@ -68,14 +83,13 @@ struct AddCalorieSheet: View {
                     )
                     .padding()
                     List {
-                        ForEach(nutritions, id: \.self) {nutrition in
+                        ForEach(viewModel.nutritions, id: \.self) {nutrition in
                             
                             Button(action: {
                                 self.group.enter()
                                 
                                 search_item(nix_id: nutrition.nix_item_id)
                                 self.group.notify(queue: .main){
-//                                    viewModel.calorie_progress += Float(nutrition.nf_calories)
                                     presentationMode.wrappedValue.dismiss()
                                     let formatter = DateFormatter()
                                     formatter.dateFormat = "dd.MM.yy"
@@ -85,14 +99,19 @@ struct AddCalorieSheet: View {
                                         "Foods Eaten": [
                                             formatter.string(from: Date()):[
                                                 "Total Calories": viewModel.calorie_progress + Float(nutrition.nf_calories),
-                                                nutrition.food_name : [
-                                                    "Calorie":nutrition.nf_calories,
-                                                    "Image": nutrition.photo.thumb,
-                                                    "Protein": self.detailed_nutrition[0].nf_protein,
-                                                    "Fat": self.detailed_nutrition[0].nf_total_fat,
-                                                    "Carbs": self.detailed_nutrition[0].nf_total_carbohydrate,
-                                                    "Sugar": self.detailed_nutrition[0].nf_sugars,
-                                                    "Date":formatter.string(from: Date())
+                                                "Total Weight": viewModel.total_weight + (self.detailed_nutrition[0].serving_weight_grams ?? 0.0),
+                                                "Total Protein": viewModel.total_protein + (self.detailed_nutrition[0].nf_protein ?? 0.0),
+                                                "Foods": [
+                                                    nutrition.food_name : [
+                                                        "Calorie":nutrition.nf_calories,
+                                                        "Image": nutrition.photo.thumb,
+                                                        "Protein": self.detailed_nutrition[0].nf_protein,
+                                                        "Fat": self.detailed_nutrition[0].nf_total_fat,
+                                                        "Carbs": self.detailed_nutrition[0].nf_total_carbohydrate,
+                                                        "Sugar": self.detailed_nutrition[0].nf_sugars,
+                                                        "Serving Weight": self.detailed_nutrition[0].serving_weight_grams,
+                                                        "Date": formatter.string(from: Date())
+                                                    ]
                                                 ]
                                             ]
                                         ]
@@ -142,7 +161,7 @@ struct AddCalorieSheet: View {
                             if !value.isEmpty && value.count > 3 {
                                 await fetch(searchTerm: value)
                             } else {
-                                nutritions.removeAll()
+                                viewModel.nutritions.removeAll()
                             }
                         }
                     }
@@ -172,7 +191,7 @@ struct AddCalorieSheet: View {
             do {
                 let nutritions = try JSONDecoder().decode(NutritionResponse.self, from: data)
                 DispatchQueue.main.async {
-                    self.nutritions = nutritions.branded
+                    viewModel.nutritions = nutritions.branded
                 }
             }
             catch {
@@ -244,7 +263,7 @@ struct AddCalorieSheet: View {
                     DispatchQueue.main.async {
                         print(nutritions.foods)
                         self.detailed_nutrition = nutritions.foods
-                        self.nutritions = nutritions2.foods
+                        viewModel.nutritions = nutritions2.foods
                     }
                 }
                 catch {

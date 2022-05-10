@@ -18,6 +18,13 @@ class AppViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var registerStageTwo = false
     @Published var calorie_progress: Float = 0.0
+    @Published var total_weight: Float = 0.0
+    @Published var total_protein: Float = 0.0
+    @Published var clarifai = [ClarifaiConcepts]()
+    @Published var isShowingCamera = false
+    @Published var isShowingPossibleResults = false
+    
+    @Published var nutritions = [Nutrition]()
     
     private let defaults = UserDefaults.standard
     
@@ -82,7 +89,10 @@ class AppViewModel: ObservableObject {
             "Goal":goal,
             "Foods Eaten": [
                 formatter.string(from: Date()): [
-                    "Total Calories": 0
+                    "Total Calories": 0,
+                    "Total Weight": 0,
+                    "Total Protein": 0,
+                    "Foods": {}
                 ]
             ]
         ]) { (err) in

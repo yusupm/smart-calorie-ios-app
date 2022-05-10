@@ -31,8 +31,9 @@ struct PhotoJson: Hashable, Codable {
 struct DetailedNutrition: Hashable, Codable {
     let nf_total_fat: Double?
     let nf_total_carbohydrate: Double?
-    let nf_protein: Double?
+    let nf_protein: Float?
     let nf_sugars: Double?
+    let serving_weight_grams: Float?
 }
 
 
@@ -58,4 +59,57 @@ struct RecipeDetails: Hashable, Codable {
     let calories: Double
     let totalTime: Double
     let yield: Double
+}
+
+
+
+
+
+struct ClarifaiResponse: Hashable, Codable {
+    let status: Clarifai
+    let outputs: [ClarifaiOutputs]
+    
+}
+
+struct ClarifaiOutputs: Hashable, Codable{
+    let data: ClarifaiData
+}
+
+
+struct ClarifaiData: Hashable, Codable{
+    let concepts: [ClarifaiConcepts]
+}
+
+struct ClarifaiConcepts: Hashable, Codable{
+    let name: String
+    let value: Double
+}
+
+
+
+
+
+struct Clarifai: Hashable, Codable {
+    let code: Int
+    let description: String
+}
+
+
+struct Request: Codable {
+    let inputs: [CInput]
+}
+
+// MARK: - Input
+struct CInput: Codable {
+    let data: CDataClass
+}
+
+// MARK: - DataClass
+struct CDataClass: Codable {
+    let image: CImage
+}
+
+// MARK: - Image
+struct CImage: Codable {
+    let base64: String
 }
