@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AuthenticationServices
 
 
 struct NutritionResponse: Hashable, Codable {
@@ -37,4 +38,24 @@ struct DetailedNutrition: Hashable, Codable {
 
 struct DetailedResponse: Hashable, Codable{
     let foods: [DetailedNutrition]
+}
+
+
+
+struct RecipeResponse: Hashable, Codable {
+    let hits: [Recipe]
+}
+
+struct Recipe: Hashable, Codable {
+    let recipe: RecipeDetails
+}
+
+struct RecipeDetails: Hashable, Codable {
+    let label: String
+    let image: String
+    let url: String
+    let ingredientLines: [String]
+    let calories: Double
+    let totalTime: Double
+    let yield: Double
 }

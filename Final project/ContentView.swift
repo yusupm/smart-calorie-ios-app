@@ -71,10 +71,8 @@ struct MainView: View {
                     
                 case 1:
                     NavigationView{
-                        VStack{
-                            Text("Screen")
-                        }
-                        .navigationTitle("Diary")
+                        RecipeVeiw()
+                        .navigationTitle("Recipes")
                     }
                     
                 case 3:
@@ -270,12 +268,12 @@ struct ProgressBar: View {
             
             
         
-//            Circle()
-//                .trim(from: 0.0, to: CGFloat(min(0.5, 1.0)))
-//                .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
-//                .foregroundColor(Color.blue)
-//                .rotationEffect(Angle(degrees: 270.0))
-//                .animation(.linear, value: 0.5)
+            Circle()
+                .trim(from: 0.0, to: CGFloat(min((viewModel.calorie_progress / globalString.totalCalorie), 1.0)))
+                .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
+                .foregroundColor(Color.blue)
+                .rotationEffect(Angle(degrees: 270.0))
+                .animation(.linear, value: 0.5)
             
             
             VStack {

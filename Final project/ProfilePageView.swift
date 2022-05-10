@@ -13,6 +13,7 @@ struct ProfilePageView: View {
     @GestureState var isDragging: Bool = false
     @State var offset: CGFloat = 0
     @State var currentDownloadId = ""
+    @State var showingGraph = false
     
     @EnvironmentObject var viewModel: AppViewModel
     let auth = Auth.auth()
@@ -42,28 +43,14 @@ struct ProfilePageView: View {
                 
                 
                 Divider()
-                
+                Spacer()
                 HStack{
-                    Text("This week")
+                    Spacer()
+                    if showingGraph {
+                        DownloadStats()
+                    }
                     Spacer()
                 }
-                .frame(height: 150)
-                .animation(.easeOut, value: isDragging)
-                .gesture(DragGesture().updating($isDragging, body: { _, out, _ in
-                    out = true
-                }).onChanged({ value in
-                    offset = isDragging ? value.location.x : 0
-                    let draggingSpace = UIScreen.main.bounds.width - 60
-                    let eachBlock = draggingSpace / CGFloat(7)
-                    let temp = Int(offset / eachBlock)
-                    let index = max(min(temp, 7-1), 0)
-                    
-                }).onEnded({ value in
-                    withAnimation{
-                        offset = .zero
-                        currentDownloadId = ""
-                    }
-                }))
                 
                 Spacer()
                 
@@ -86,7 +73,12 @@ struct ProfilePageView: View {
             }
             .navigationTitle("Profile")
         }
-//        .onAppear(perform: load_profile)
+        .onAppear{
+            load_profile()
+            withAnimation{
+                showingGraph = true
+            }
+        }
     }
     
     func load_profile() {
@@ -99,7 +91,81 @@ struct ProfilePageView: View {
             self.goal =  documents.get("Goal") as! String
         }
     }
+    
+    @ViewBuilder
+    func DownloadStats()->some View{
+        
+        VStack(spacing: 15){
+            
+            HStack{
+                
+                VStack(alignment: .leading, spacing: 13) {
+                    
+                    Text("Statistics")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                        .colorInvert()
+                    
+                    Menu {
+                        
+                    } label: {
+                        
+                        Label {
+                            Image(systemName: "chevron.down")
+                        } icon: {
+                            Text("Last 7 Days")
+                        }
+                        .font(.callout)
+                        .foregroundColor(.gray)
+
+                    }
+
+                }
+                
+                Spacer()
+                
+                Button {
+                    
+                } label: {
+                    Image(systemName: "arrow.up.forward")
+                        .font(.title2.bold())
+                }
+                .foregroundColor(.white)
+                .offset(y: -10)
+
+            }
+            
+            // Bar Graph With Gestures...
+            BarGraph(calories: weeklyCalories)
+                .padding(.top,25)
+        }
+        .padding(15)
+        .background(
+        
+            RoundedRectangle(cornerRadius: 20)
+                .fill(Color.black)
+        )
+        .padding(.vertical,20)
+    }
 }
+
+struct Calories: Identifiable{
+    var id = UUID().uuidString
+    var calories: CGFloat
+    var day: String
+    var color: Color
+}
+
+var weeklyCalories: [Calories] = [
+
+    Calories(calories: 450, day: "M", color: Color.purple),
+    Calories(calories: 600, day: "T", color: Color.green),
+    Calories(calories: 900, day: "W", color: Color.green),
+    Calories(calories: 400, day: "T", color: Color.purple),
+    Calories(calories: 500, day: "F", color: Color.green),
+    Calories(calories: 200, day: "S", color: Color.purple),
+    Calories(calories: 500, day: "S", color: Color.purple)
+]
 
 struct ProfilePageView_Previews: PreviewProvider {
     static var previews: some View {
