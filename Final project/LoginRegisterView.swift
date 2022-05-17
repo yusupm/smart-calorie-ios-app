@@ -2,7 +2,7 @@
 //  LoginView2.swift
 //  Final project
 //
-//  Created by BOLT on 26/04/2022.
+//  Created by Yusup on 26/04/2022.
 //
 
 import SwiftUI

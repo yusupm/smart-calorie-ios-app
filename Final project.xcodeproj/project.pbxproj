@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65322D6F282D5EF4009B8C4E /* ProggressPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65322D6E282D5EF4009B8C4E /* ProggressPageView.swift */; };
 		65426CC328295AC400ED9E61 /* BarGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65426CC228295AC400ED9E61 /* BarGraph.swift */; };
 		65426CC52829729B00ED9E61 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65426CC42829729B00ED9E61 /* RecipeView.swift */; };
 		6542E6832826BD4E0015A074 /* ProfilePageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6542E6822826BD4E0015A074 /* ProfilePageView.swift */; };
@@ -21,7 +22,6 @@
 		6568EC5F281CFA7100C5A63C /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 6568EC5E281CFA7100C5A63C /* FirebaseFirestoreCombine-Community */; };
 		6568EC61281CFA7100C5A63C /* FirebaseFirestoreSwift-Beta in Frameworks */ = {isa = PBXBuildFile; productRef = 6568EC60281CFA7100C5A63C /* FirebaseFirestoreSwift-Beta */; };
 		6568EC63281CFA7100C5A63C /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 6568EC62281CFA7100C5A63C /* FirebaseStorage */; };
-		658C2995281AB72D0002CAF2 /* AccountCreationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C2994281AB72D0002CAF2 /* AccountCreationModel.swift */; };
 		658C2997281AB8110002CAF2 /* AppViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C2996281AB8110002CAF2 /* AppViewModel.swift */; };
 		658C299D281AE7070002CAF2 /* NutritionKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C299C281AE7070002CAF2 /* NutritionKeys.swift */; };
 		658C299F281AE74B0002CAF2 /* AddCalorieSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 658C299E281AE74B0002CAF2 /* AddCalorieSheet.swift */; };
@@ -54,13 +54,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		65322D6E282D5EF4009B8C4E /* ProggressPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProggressPageView.swift; sourceTree = "<group>"; };
 		65426CC228295AC400ED9E61 /* BarGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarGraph.swift; sourceTree = "<group>"; };
 		65426CC42829729B00ED9E61 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		6542E6822826BD4E0015A074 /* ProfilePageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePageView.swift; sourceTree = "<group>"; };
 		6543F87A2813E3960061D6E8 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6556101B280E708D00455E40 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		655F419D282AB78D0065B529 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
-		658C2994281AB72D0002CAF2 /* AccountCreationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountCreationModel.swift; sourceTree = "<group>"; };
 		658C2996281AB8110002CAF2 /* AppViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppViewModel.swift; sourceTree = "<group>"; };
 		658C299C281AE7070002CAF2 /* NutritionKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutritionKeys.swift; sourceTree = "<group>"; };
 		658C299E281AE74B0002CAF2 /* AddCalorieSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCalorieSheet.swift; sourceTree = "<group>"; };
@@ -139,7 +139,6 @@
 				658C299E281AE74B0002CAF2 /* AddCalorieSheet.swift */,
 				658C299C281AE7070002CAF2 /* NutritionKeys.swift */,
 				658C2996281AB8110002CAF2 /* AppViewModel.swift */,
-				658C2994281AB72D0002CAF2 /* AccountCreationModel.swift */,
 				6556101B280E708D00455E40 /* Extensions.swift */,
 				65E3F0AA280A8220001A1F4E /* Assets.xcassets */,
 				6543F87A2813E3960061D6E8 /* GoogleService-Info.plist */,
@@ -150,6 +149,7 @@
 				65426CC228295AC400ED9E61 /* BarGraph.swift */,
 				65426CC42829729B00ED9E61 /* RecipeView.swift */,
 				655F419D282AB78D0065B529 /* CameraView.swift */,
+				65322D6E282D5EF4009B8C4E /* ProggressPageView.swift */,
 			);
 			path = "Final project";
 			sourceTree = "<group>";
@@ -328,10 +328,10 @@
 				658C29A1281B02C90002CAF2 /* RegisterView.swift in Sources */,
 				6542E6832826BD4E0015A074 /* ProfilePageView.swift in Sources */,
 				655F419E282AB78D0065B529 /* CameraView.swift in Sources */,
-				658C2995281AB72D0002CAF2 /* AccountCreationModel.swift in Sources */,
 				65E3F0A9280A821D001A1F4E /* ContentView.swift in Sources */,
 				658C2997281AB8110002CAF2 /* AppViewModel.swift in Sources */,
 				6556101C280E708D00455E40 /* Extensions.swift in Sources */,
+				65322D6F282D5EF4009B8C4E /* ProggressPageView.swift in Sources */,
 				659C62CC2817BD8600C1DEDC /* LoginRegisterView.swift in Sources */,
 				65426CC52829729B00ED9E61 /* RecipeView.swift in Sources */,
 				658C299D281AE7070002CAF2 /* NutritionKeys.swift in Sources */,
@@ -500,7 +500,7 @@
 				DEVELOPMENT_TEAM = 8X7C72A2S6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Accept to scan Bar code";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses camera to scan barcodes or foods";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -531,7 +531,7 @@
 				DEVELOPMENT_TEAM = 8X7C72A2S6;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Accept to scan Bar code";
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app uses camera to scan barcodes or foods";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

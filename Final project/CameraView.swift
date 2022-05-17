@@ -2,7 +2,7 @@
 //  Camera View.swift
 //  Final project
 //
-//  Created by BOLT on 10/05/2022.
+//  Created by Yusup on 10/05/2022.
 //
 
 import SwiftUI
@@ -47,7 +47,7 @@ struct CameraView: View {
                     if camera.isTaken{
                         
                         Button(action: {if !camera.isSaved{camera.sendPicData()}}, label: {
-                            Text(camera.isSaved ? "Saved" : "Save")
+                            Text(camera.isSaved ? "Use" : "Use")
                                 .foregroundColor(.black)
                                 .fontWeight(.semibold)
                                 .padding(.vertical,10)

@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Final project
 //
-//  Created by BOLT on 16/04/2022.
+//  Created by Yusup on 16/04/2022.
 //
 
 import SwiftUI
@@ -76,12 +76,7 @@ struct MainView: View {
                     }
                     
                 case 3:
-                    NavigationView{
-                        VStack{
-                            Text("Progress")
-                        }
-                        .navigationTitle("Progress")
-                    }
+                    ProggressPageView()
                 default:
                     ProfilePageView()
                 }
@@ -166,21 +161,6 @@ struct HomeView: View {
                             }
                             Spacer()
                         }
-//                        Button(action: {
-//                            viewModel.calorie_progress += 100
-//
-//                        }) {
-//                            HStack {
-//                                Image(systemName: "plus.rectangle.fill")
-//                                Text("Increment")
-//                            }
-//                            .padding(15.0)
-//                            .overlay(
-//                                RoundedRectangle(cornerRadius: 15.0)
-//                                    .stroke(lineWidth: 2.0)
-//                            )
-//                        }
-                        
                         Spacer()
                             .padding(5)
                         
@@ -191,40 +171,36 @@ struct HomeView: View {
                             Spacer()
                         }
                         if self.foods_eaten[formatter.string(from: Date())] != nil{
-                            let all_keys1 = todays_foods.allKeys
-                            let all_keys = all_keys1.filter { $0 as! String != "Total Calories" }
+                            let all_keys = todays_foods.allKeys
                             ForEach(0..<all_keys.count, id: \.self){number in
                                 
                                 let food = todays_foods[all_keys[number]] as! NSDictionary
-                                let checked = checkTime(date: food["Date"] as! String)
-                                if checked{
-                                    HStack {
-                                        let photo_url = URL(string: food["Image"] as! String)
-                                        AsyncImage(url: photo_url, content: { image in
-                                            image.resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(maxWidth: 60)
-                                        }, placeholder: {
-                                            ProgressView()
-                                        })
-                                        .padding()
-                                        Spacer()
-                                        Text(todays_foods.allKeys[number] as! String)
-                                            .bold()
-                                            .foregroundColor(.textColor)
-                                        Spacer()
-                                        Text("\(food["Calorie"] as! Double, specifier: "%.2f") kcal")
-                                            .bold()
-                                            .foregroundColor(Color.textColor)
-                                    }
-                                    .font(.headline)
+                                HStack {
+                                    let photo_url = URL(string: food["Image"] as! String)
+                                    AsyncImage(url: photo_url, content: { image in
+                                        image.resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(maxWidth: 60)
+                                    }, placeholder: {
+                                        ProgressView()
+                                    })
                                     .padding()
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 25)
-                                            .fill(Color.backgroundColor)
-                                            .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 0)
-                                    )
+                                    Spacer()
+                                    Text(todays_foods.allKeys[number] as! String)
+                                        .bold()
+                                        .foregroundColor(.textColor)
+                                    Spacer()
+                                    Text("\(food["Calorie"] as! Double, specifier: "%.2f") kcal")
+                                        .bold()
+                                        .foregroundColor(Color.textColor)
                                 }
+                                .font(.headline)
+                                .padding()
+                                .background(
+                                    RoundedRectangle(cornerRadius: 25)
+                                        .fill(Color.backgroundColor)
+                                        .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 0)
+                                )
                             }
                         }
                     }
@@ -252,18 +228,6 @@ struct HomeView: View {
                 viewModel.total_weight = today["Total Weight"] as! Float
                 viewModel.total_protein = today["Total Protein"] as! Float
             }
-        }
-    }
-    
-    func checkTime(date: String) -> Bool{
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yy"
-        
-        if date == formatter.string(from: Date()){
-            return true
-        }
-        else{
-            return false
         }
     }
 }

@@ -2,12 +2,13 @@
 //  NutritionKeys.swift
 //  Final project
 //
-//  Created by BOLT on 28/04/2022.
+//  Created by Yusup on 28/04/2022.
 //
 
 import SwiftUI
 import AuthenticationServices
 
+// MARK: - Instant nutrition resposne
 
 struct NutritionResponse: Hashable, Codable {
     let branded: [Nutrition]
@@ -28,6 +29,8 @@ struct PhotoJson: Hashable, Codable {
     let thumb: String
 }
 
+// MARK: - Detailed Nutritionix resposne
+
 struct DetailedNutrition: Hashable, Codable {
     let nf_total_fat: Double?
     let nf_total_carbohydrate: Double?
@@ -42,6 +45,7 @@ struct DetailedResponse: Hashable, Codable{
 }
 
 
+// MARK: - Recipe
 
 struct RecipeResponse: Hashable, Codable {
     let hits: [Recipe]
@@ -64,6 +68,7 @@ struct RecipeDetails: Hashable, Codable {
 
 
 
+// MARK: - Clarifai
 
 struct ClarifaiResponse: Hashable, Codable {
     let status: Clarifai
@@ -86,9 +91,6 @@ struct ClarifaiConcepts: Hashable, Codable{
 }
 
 
-
-
-
 struct Clarifai: Hashable, Codable {
     let code: Int
     let description: String
@@ -99,17 +101,16 @@ struct Request: Codable {
     let inputs: [CInput]
 }
 
-// MARK: - Input
+
 struct CInput: Codable {
     let data: CDataClass
 }
 
-// MARK: - DataClass
+
 struct CDataClass: Codable {
     let image: CImage
 }
 
-// MARK: - Image
 struct CImage: Codable {
     let base64: String
 }

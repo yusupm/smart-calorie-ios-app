@@ -2,7 +2,7 @@
 //  AppViewModel.swift
 //  Final project
 //
-//  Created by BOLT on 28/04/2022.
+//  Created by Yusup on 28/04/2022.
 //
 
 import SwiftUI
@@ -18,7 +18,7 @@ class AppViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var registerStageTwo = false
     @Published var calorie_progress: Float = 0.0
-    @Published var total_weight: Float = 0.0
+    @Published var total_weight: Float = 1
     @Published var total_protein: Float = 0.0
     @Published var clarifai = [ClarifaiConcepts]()
     @Published var isShowingCamera = false
@@ -42,9 +42,7 @@ class AppViewModel: ObservableObject {
                 self?.alert.toggle()
                 return
             } else {
-                //self.isSuccessful = true
                 print("Logged in!")
-//                authentication.updateValidation(success: true)
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     withAnimation(Animation.spring()) {
                         self?.signedIn = true
@@ -63,12 +61,9 @@ class AppViewModel: ObservableObject {
                 print("Error: \(error?.localizedDescription ?? "")")
                 self?.alert.toggle()
                 self?.errorMessage = error!.localizedDescription
-                //Self.showAlert = true
             } else {
-                //self.isSuccessful = true
                 print("Registered")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-//                    self?.signedIn = true
                     self?.registerStageTwo.toggle()
                 }
                 
@@ -90,9 +85,9 @@ class AppViewModel: ObservableObject {
             "Foods Eaten": [
                 formatter.string(from: Date()): [
                     "Total Calories": 0,
-                    "Total Weight": 0,
+                    "Total Weight": 1,
                     "Total Protein": 0,
-                    "Foods": {}
+                    "Foods": []
                 ]
             ]
         ]) { (err) in

@@ -2,7 +2,7 @@
 //  AddCalorieSheet.swift
 //  Final project
 //
-//  Created by BOLT on 28/04/2022.
+//  Created by Yusup on 28/04/2022.
 //
 
 import SwiftUI
@@ -95,6 +95,7 @@ struct AddCalorieSheet: View {
                                     formatter.dateFormat = "dd.MM.yy"
                                     
                                     let db = Firestore.firestore()
+                                    db.collection("users").document(Auth.auth().currentUser!.uid)
                                     db.collection("users").document(Auth.auth().currentUser!.uid).setData([
                                         "Foods Eaten": [
                                             formatter.string(from: Date()):[
@@ -121,10 +122,6 @@ struct AddCalorieSheet: View {
                                         }
                                     }
                                 }
-                                
-                                
-                                
-                                
                                 
                             }, label: {
                                 HStack{

@@ -2,7 +2,7 @@
 //  RecipieVeiw.swift
 //  Final project
 //
-//  Created by BOLT on 09/05/2022.
+//  Created by Yusup on 09/05/2022.
 //
 
 import SwiftUI

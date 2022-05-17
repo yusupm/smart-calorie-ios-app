@@ -1,8 +1,8 @@
 //
 //  BarGraph.swift
-//  BarGraphGestures (iOS)
+//  Final project
 //
-//  Created by Balaji on 02/11/21.
+//  Created by Yusup on 26/04/2022.
 //
 
 import SwiftUI
@@ -24,7 +24,7 @@ struct BarGraph: View {
                 CardView(daily: daily)
             }
         }
-        .frame(height: 150)
+        .frame(height: 500)
         .animation(.easeOut, value: isDragging)
         // Gesutre...
         .gesture(

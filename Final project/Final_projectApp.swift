@@ -2,7 +2,7 @@
 //  Final_projectApp.swift
 //  Final project
 //
-//  Created by BOLT on 16/04/2022.
+//  Created by Yusup on 16/04/2022.
 //
 
 import SwiftUI
