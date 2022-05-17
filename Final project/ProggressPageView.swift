@@ -81,7 +81,7 @@ struct Calories: Identifiable{
     var color: Color
 }
 
-var weeklyCalories: [Calories] = [
+var weeklyCalories: [Calories] = [ // weekly calories, needs to be connected to the database
 
     Calories(calories: 450, day: "M", color: Color.purple),
     Calories(calories: 600, day: "T", color: Color.green),

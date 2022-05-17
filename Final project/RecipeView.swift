@@ -12,7 +12,7 @@ struct RecipeVeiw: View {
     @State private var searchText: String = ""
     
     var body: some View {
-        List {
+        List { // list of recipes
             ForEach(recipes, id: \.self) {recipe in
                 NavigationLink {
                     ForEach(recipe.recipe.ingredientLines, id: \.self) {ingredient in
@@ -54,7 +54,7 @@ struct RecipeVeiw: View {
         }
     }
     
-    func get_recipes(keyword: String) {
+    func get_recipes(keyword: String) { // api request to fetch recipes
         
         let url = URL(string: "https://api.edamam.com/api/recipes/v2?app_id=6ea5c8b8&app_key=a5a0fe66dd5531f967a4c604e491b3c6&type=public&q=\(keyword)")
 

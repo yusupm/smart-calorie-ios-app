@@ -28,32 +28,32 @@ struct AddCalorieSheet: View {
     var body: some View{
             NavigationView{
                 VStack{
-                    NavigationLink(destination: CodeScannerView(codeTypes: [.ean8, .ean13], completion: handleScan), isActive: $isShowingScanner) {
+                    NavigationLink(destination: CodeScannerView(codeTypes: [.ean8, .ean13], completion: handleScan), isActive: $isShowingScanner) { // Barcode scanner
                         EmptyView()
                     }
-                    NavigationLink(destination: CameraView(), isActive: $viewModel.isShowingCamera) {
+                    NavigationLink(destination: CameraView(), isActive: $viewModel.isShowingCamera) { // Food Scanner
                         EmptyView()
                     }
                     
-                    HStack{
-                        Image(systemName: "magnifyingglass")
+                    HStack{ // Search bar
+                        Image(systemName: "magnifyingglass") // extra detail
                             .foregroundColor(Color.foregroundColor)
                         TextField("Search", text: $searchText)
                             .foregroundColor(Color.foregroundColor)
                             .disableAutocorrection(true)
                             .overlay(
-                                Image(systemName: "xmark.circle.fill")
+                                Image(systemName: "xmark.circle.fill") // clear button
                                     .padding()
                                     .offset(x: 10)
                                     .foregroundColor(Color.foregroundColor)
-                                    .opacity(searchText.isEmpty ? 0.0: 1.0)
+                                    .opacity(searchText.isEmpty ? 0.0: 1.0) // only showed if text field is not empty
                                     .onTapGesture {
-                                        searchText = ""
+                                        searchText = "" // clears search
                                     }
                                 ,alignment: .trailing
                             )
                         Button {
-                            isShowingScanner = true
+                            isShowingScanner = true // activates navigation link for barcode scanner
                         } label: {
                             Image(systemName: "barcode.viewfinder")
                                 .font(.system(size: 20, weight: .regular, design: .default))
@@ -64,7 +64,7 @@ struct AddCalorieSheet: View {
                         }
                         
                         Button {
-                            viewModel.isShowingCamera = true
+                            viewModel.isShowingCamera = true // activates navigation link for food scanner
                         } label: {
                             Image(systemName: "camera.viewfinder")
                                 .font(.system(size: 20, weight: .regular, design: .default))
@@ -77,26 +77,26 @@ struct AddCalorieSheet: View {
                     .font(.headline)
                     .padding()
                     .background(
-                        RoundedRectangle(cornerRadius: 25)
+                        RoundedRectangle(cornerRadius: 25) // frame
                             .fill(Color.backgroundColor)
                             .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 0)
                     )
                     .padding()
-                    List {
+                    List { // list of foods
                         ForEach(viewModel.nutritions, id: \.self) {nutrition in
                             
                             Button(action: {
-                                self.group.enter()
+                                self.group.enter() // used to pause some process until finished
                                 
-                                search_item(nix_id: nutrition.nix_item_id)
-                                self.group.notify(queue: .main){
+                                search_item(nix_id: nutrition.nix_item_id) // more detail is searched for specific food
+                                self.group.notify(queue: .main){ // waits for self.group.leave() call before executing the body, which is called in search_item function
                                     presentationMode.wrappedValue.dismiss()
                                     let formatter = DateFormatter()
                                     formatter.dateFormat = "dd.MM.yy"
                                     
                                     let db = Firestore.firestore()
                                     db.collection("users").document(Auth.auth().currentUser!.uid)
-                                    db.collection("users").document(Auth.auth().currentUser!.uid).setData([
+                                    db.collection("users").document(Auth.auth().currentUser!.uid).setData([ // the chose food gets added to the database
                                         "Foods Eaten": [
                                             formatter.string(from: Date()):[
                                                 "Total Calories": viewModel.calorie_progress + Float(nutrition.nf_calories),
@@ -153,12 +153,12 @@ struct AddCalorieSheet: View {
                     }
                     .navigationTitle("Add Food")
                     .listStyle(.plain)
-                    .onChange(of: searchText) { value in
+                    .onChange(of: searchText) { value in // checks if the text field is being typed
                         async {
-                            if !value.isEmpty && value.count > 3 {
-                                await fetch(searchTerm: value)
+                            if !value.isEmpty && value.count > 3 { // avoids fetching data if search bar is empty or has less than 3 characters
+                                await fetch(searchTerm: value) // fetches list of foods
                             } else {
-                                viewModel.nutritions.removeAll()
+                                viewModel.nutritions.removeAll() // removes the list
                             }
                         }
                     }
@@ -167,9 +167,9 @@ struct AddCalorieSheet: View {
             }
     }
     
-    func fetch(searchTerm: String){
+    func fetch(searchTerm: String){ // fetch list of foods
         
-        let url = URL(string: "https://trackapi.nutritionix.com/v2/search/instant?query=\(searchTerm)")
+        let url = URL(string: "https://trackapi.nutritionix.com/v2/search/instant?query=\(searchTerm)") // api url
 
         var request = URLRequest(url: url!)
         request.httpMethod = "GET"
@@ -186,7 +186,7 @@ struct AddCalorieSheet: View {
             }
             
             do {
-                let nutritions = try JSONDecoder().decode(NutritionResponse.self, from: data)
+                let nutritions = try JSONDecoder().decode(NutritionResponse.self, from: data) // decode response
                 DispatchQueue.main.async {
                     viewModel.nutritions = nutritions.branded
                 }
@@ -199,7 +199,7 @@ struct AddCalorieSheet: View {
         
         task.resume()
     }
-    func search_item(nix_id: String){
+    func search_item(nix_id: String){ // get more details about a product
         
         let url = URL(string: "https://trackapi.nutritionix.com/v2/search/item?nix_item_id=\(nix_id)")
 
@@ -234,10 +234,10 @@ struct AddCalorieSheet: View {
         task.resume()
     }
     
-    func handleScan(result: Result<ScanResult, ScanError>){
+    func handleScan(result: Result<ScanResult, ScanError>){ // used for barcode scanner, searches for the barcode values
         isShowingScanner = false
         
-        switch result {
+        switch result { // error handling
         case .success(let result):
             let url = URL(string: "https://trackapi.nutritionix.com/v2/search/item?upc=\(result.string)")
             var request = URLRequest(url: url!)
@@ -258,7 +258,6 @@ struct AddCalorieSheet: View {
                     let nutritions = try JSONDecoder().decode(DetailedResponse.self, from: data)
                     let nutritions2 = try JSONDecoder().decode(NutritionResponse2.self, from: data)
                     DispatchQueue.main.async {
-                        print(nutritions.foods)
                         self.detailed_nutrition = nutritions.foods
                         viewModel.nutritions = nutritions2.foods
                     }
@@ -271,7 +270,7 @@ struct AddCalorieSheet: View {
             task.resume()
             
             
-        case .failure(let error):
+        case .failure(let error): // error handling
             print("Scanning failed: \(error.localizedDescription)")
         }
     }

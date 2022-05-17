@@ -200,7 +200,7 @@ struct ProfilePageView: View {
         }
     }
     
-    func load_profile() {
+    func load_profile() { // refreshes user data
         let db = Firestore.firestore()
         db.collection("users").document(Auth.auth().currentUser!.uid).addSnapshotListener { (querySnapshot, error) in
             guard let documents = querySnapshot else {

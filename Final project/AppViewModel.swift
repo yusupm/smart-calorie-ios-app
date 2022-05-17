@@ -28,24 +28,24 @@ class AppViewModel: ObservableObject {
     
     private let defaults = UserDefaults.standard
     
-    var isSignedIn : Bool {
+    var isSignedIn : Bool { // returns the login status
     return auth.currentUser != nil
     }
     
     func signIn(email: String, password: String){
-        isLoading.toggle()
+        isLoading.toggle() // activates loading view
         auth.signIn(withEmail: email, password: password) { [weak self] (result, error) in
-            self?.isLoading.toggle()
+            self?.isLoading.toggle() // deactivates loading view
             if error != nil {
                 print("Error: \(error?.localizedDescription ?? "")")
                 self?.errorMessage = error!.localizedDescription
-                self?.alert.toggle()
+                self?.alert.toggle() // activates alret, and shows the error message
                 return
             } else {
                 print("Logged in!")
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     withAnimation(Animation.spring()) {
-                        self?.signedIn = true
+                        self?.signedIn = true // switches screen to home page
                     }
                 }
                 
@@ -71,12 +71,12 @@ class AppViewModel: ObservableObject {
         }
     }
     
-    func saveDetails(age : String, height : String, weight : String, gender : String, goal : String) {
+    func saveDetails(age : String, height : String, weight : String, gender : String, goal : String) { // saves user details on the database
         isLoading.toggle()
         let db = Firestore.firestore()
         let formatter = DateFormatter()
         formatter.dateFormat = "dd.MM.yy"
-        db.collection("users").document(Auth.auth().currentUser!.uid).setData([
+        db.collection("users").document(Auth.auth().currentUser!.uid).setData([ // uid is used for security
             "Age": age,
             "Height":height,
             "Weight":weight,
@@ -94,12 +94,12 @@ class AppViewModel: ObservableObject {
             if err != nil{
                 self.isLoading.toggle()
                 self.errorMessage = err!.localizedDescription
-                self.alert.toggle()
+                self.alert.toggle() // error is displayed as elert
                 return
             }
             self.isLoading.toggle()
             self.signedIn = true
-            self.registerStageTwo.toggle()
+            self.registerStageTwo.toggle() // activates NavigationLink which directs to RegisterView
         }
     }
     

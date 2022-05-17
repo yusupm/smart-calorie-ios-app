@@ -21,7 +21,7 @@ struct LoginRegisterView: View {
     
     @EnvironmentObject var viewModel: AppViewModel
     
-    func hideKeyboard(){
+    func hideKeyboard(){ // function to dissmiss keyboard when clicked on screen
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
@@ -29,7 +29,7 @@ struct LoginRegisterView: View {
         NavigationView{
             Background {
                 VStack {
-                    NavigationLink(destination: RegisterView(), isActive: $viewModel.registerStageTwo) {
+                    NavigationLink(destination: RegisterView(), isActive: $viewModel.registerStageTwo) { // directs to register stage 2
                         EmptyView()
                     }
                     VStack(spacing: 10) {
@@ -172,14 +172,14 @@ struct LoginRegisterView: View {
                     
                     
                 }
-                .autocapitalization(.none)
+                .autocapitalization(.none) // disables auto capital
                 .offset(y: (isFocused && registerMode) ? -29 : 0).animation(.easeInOut)
             }
-        }.onTapGesture {
+        }.onTapGesture { // to dismiss keyboard
             isFocused = false
             UIApplication.shared.endEditing()
         }
-        .alert(isPresented: $viewModel.alert) {
+        .alert(isPresented: $viewModel.alert) { // for errors
             Alert(title: Text("Error"), message: Text(viewModel.errorMessage), dismissButton: .default(Text("Ok")))
         }
     }

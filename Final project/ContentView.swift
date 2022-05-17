@@ -30,7 +30,7 @@ struct ContentView: View {
             }
         }
         .onAppear{
-            viewModel.signedIn = viewModel.isSignedIn
+            viewModel.signedIn = viewModel.isSignedIn // refreshes sign in status every app opening
         }
     }
 }
@@ -41,11 +41,11 @@ struct MainView: View {
     var backgroundColor = Color(#colorLiteral(red: 0.974566576, green: 0.974566576, blue: 0.974566576, alpha: 1))
     
     
-    @State var selectedIndex = 0
-    @State var presented = false
+    @State var selectedIndex = 0 // used to determine screen number
+    @State var presented = false // for AddCalorieSheet view
     
 
-    let icons = [
+    let icons = [ // For navigation bar
         "house",
         "book.closed.circle.fill",
         "plus",
@@ -53,7 +53,7 @@ struct MainView: View {
         "person.circle.fill"
     ]
     
-    let titles = [
+    let titles = [ // For navigation bar
         "Home",
         "Diary",
         "",
@@ -65,7 +65,7 @@ struct MainView: View {
         VStack{
             
             ZStack{
-                switch selectedIndex{
+                switch selectedIndex{ // Sitch of screens depending on the index
                 case 0:
                     HomeView()
                     
@@ -84,20 +84,20 @@ struct MainView: View {
             Spacer()
             Divider()
 
-            HStack{
+            HStack{ // Navigation Bar
                 
                 ForEach(0..<5, id: \.self) { number in
                     Spacer()
                     Button(action: {
-                        if number == 2{
-                            presented.toggle()
+                        if number == 2{ // if Plus button is pressed
+                            presented.toggle() // Displays sheet view
                         }
                         else{
-                            self.selectedIndex = number
+                            self.selectedIndex = number // changes index number to change view
                         }
                     }, label: {
                         if number == 2 {
-                            Image(systemName: icons[number])
+                            Image(systemName: icons[number]) // Plus button
                                 .font(.system(size: 25, weight: .regular, design: .default))
                                 .foregroundColor(.white)
                                 .frame(width: 60, height: 60)
@@ -139,12 +139,12 @@ struct HomeView: View {
                 Color.backgroundColor
                     .edgesIgnoringSafeArea(.all)
                 
-                ScrollView {
+                ScrollView { // Makes it scrollable for easy navigation
                     VStack {
                         ProgressBar()
                             .frame(width: 250.0, height: 250.0)
                             .padding(40.0)
-                        HStack {
+                        HStack { // Label indicator for progress bar
                             Spacer()
                             VStack {
                                 Capsule()
@@ -170,14 +170,14 @@ struct HomeView: View {
                             .foregroundColor(.textColor)
                             Spacer()
                         }
-                        if self.foods_eaten[formatter.string(from: Date())] != nil{
+                        if self.foods_eaten[formatter.string(from: Date())] != nil{ // checks to see if it was initiated
                             let all_keys = todays_foods.allKeys
-                            ForEach(0..<all_keys.count, id: \.self){number in
+                            ForEach(0..<all_keys.count, id: \.self){number in // list of foods returned from api
                                 
                                 let food = todays_foods[all_keys[number]] as! NSDictionary
                                 HStack {
                                     let photo_url = URL(string: food["Image"] as! String)
-                                    AsyncImage(url: photo_url, content: { image in
+                                    AsyncImage(url: photo_url, content: { image in //Display image
                                         image.resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(maxWidth: 60)
@@ -186,18 +186,18 @@ struct HomeView: View {
                                     })
                                     .padding()
                                     Spacer()
-                                    Text(todays_foods.allKeys[number] as! String)
+                                    Text(todays_foods.allKeys[number] as! String) // Name of the food
                                         .bold()
                                         .foregroundColor(.textColor)
                                     Spacer()
-                                    Text("\(food["Calorie"] as! Double, specifier: "%.2f") kcal")
+                                    Text("\(food["Calorie"] as! Double, specifier: "%.2f") kcal") // specifier is used to avoid many numbers after .
                                         .bold()
                                         .foregroundColor(Color.textColor)
                                 }
                                 .font(.headline)
                                 .padding()
                                 .background(
-                                    RoundedRectangle(cornerRadius: 25)
+                                    RoundedRectangle(cornerRadius: 25) // Creates a nice frame
                                         .fill(Color.backgroundColor)
                                         .shadow(color: Color.black.opacity(0.15), radius: 10, x: 0, y: 0)
                                 )
@@ -208,15 +208,15 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
             .onAppear{
-                fetchData()
+                fetchData() // refreshes data every time page is viewed
                 formatter.dateFormat = "dd.MM.yy"
             }
         }
     }
-    func fetchData() {
-        let db = Firestore.firestore()
+    func fetchData() { // fetches data from the database about the signed in user
+        let db = Firestore.firestore() // initiated database
         db.collection("users").document(Auth.auth().currentUser!.uid).addSnapshotListener { (querySnapshot, error) in
-            guard let documents = querySnapshot else {
+            guard let documents = querySnapshot else { // error handling
                 print("No documents")
                 return
             }
@@ -238,13 +238,13 @@ struct ProgressBar: View {
     
     var body: some View {
         ZStack {
-            Circle()
+            Circle() // complete circle in grey shows total
                 .stroke(lineWidth: 30.0)
                 .opacity(0.3)
                 .foregroundColor(Color.trackColor)
             
-            Circle()
-                .trim(from: 0.0, to: CGFloat(min(viewModel.calorie_progress / globalString.totalCalorie, 1.0)))
+            Circle() // Represents calorie progress
+                .trim(from: 0.0, to: CGFloat(min(viewModel.calorie_progress / globalString.totalCalorie, 1.0))) // decimal percentage of calorie proggress is calculated
                 .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
                 .foregroundColor(Color.red)
                 .rotationEffect(Angle(degrees: 270.0))
@@ -252,8 +252,8 @@ struct ProgressBar: View {
             
             
         
-            Circle()
-                .trim(from: 0.0, to: CGFloat(min((viewModel.total_protein / viewModel.total_weight), 1.0)))
+            Circle() // represents protein progress
+                .trim(from: 0.0, to: CGFloat(min((viewModel.total_protein / viewModel.total_weight), 1.0))) // decimal percentage of protein proggress from total weight is calculated
                 .stroke(style: StrokeStyle(lineWidth: 30.0, lineCap: .round, lineJoin: .round))
                 .foregroundColor(Color.blue)
                 .rotationEffect(Angle(degrees: 270.0))
@@ -274,7 +274,7 @@ struct ProgressBar: View {
     }
 }
 
-struct LoadingScreen: View {
+struct LoadingScreen: View { // Simple loading screen view 
     var body: some View {
         ZStack {
             Color.black.opacity(0.2).ignoresSafeArea(.all, edges: .all)

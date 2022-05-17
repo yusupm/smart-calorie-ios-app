@@ -12,14 +12,14 @@ import Firebase
 struct Final_projectApp: App {
     
     init() {
-        FirebaseApp.configure()
+        FirebaseApp.configure() // initiates Firebase
     }
     
     var body: some Scene {
         WindowGroup {
             let viewModel = AppViewModel()
             ContentView()
-                .environmentObject(viewModel)
+                .environmentObject(viewModel) // Enables any class to access the same copy of AppViewModel
         }
     }
 }
